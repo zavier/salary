@@ -12,9 +12,9 @@
 
 
 
-### 用例
+## 用例
 
-用例1：增加新雇员
+### 用例1：增加新雇员
 
 使用AddEmp操作可以增加新的雇员。该操作包含有雇员的名字、地址以及分配的雇员号。该操作有如下3种形式:
 
@@ -30,7 +30,7 @@ AddEmp <EmpId> "<name>" "<addredd>" C <monthly-salary> <commission-rate>
 
 
 
-用例2：删除雇员
+### 用例2：删除雇员
 
 使用DelEmp操作来删除雇员。该操作使用如下形式：
 
@@ -42,7 +42,7 @@ AddEmp <EmpId> "<name>" "<addredd>" C <monthly-salary> <commission-rate>
 
 
 
-用例3：登记时间卡
+### 用例3：登记时间卡
 
 执行TimeCard操作时，系统会创建一个时间卡记录，并把该记录和对应的雇员记录关联起来。
 
@@ -58,7 +58,7 @@ AddEmp <EmpId> "<name>" "<addredd>" C <monthly-salary> <commission-rate>
 
 
 
-用例4：登记销售凭条
+### 用例4：登记销售凭条
 
 执行SalesReceipt操作时，系统会创建一个新的销售凭条记录，并把该记录和对应的应支付薪金的雇员联系起来。
 
@@ -74,7 +74,7 @@ AddEmp <EmpId> "<name>" "<addredd>" C <monthly-salary> <commission-rate>
 
 
 
-用例5：登记协会服务费
+### 用例5：登记协会服务费
 
 执行这个操作时，系统会创建一个服务费用记录，并把该记录和对应的协会成员关联起来。
 
@@ -86,7 +86,7 @@ AddEmp <EmpId> "<name>" "<addredd>" C <monthly-salary> <commission-rate>
 
 
 
-用例6：更改雇员明细
+### 用例6：更改雇员明细
 
 执行这个操作时，系统会更改对应雇员记录的详细信息之一。该操作有几个可能的变体：
 
@@ -109,7 +109,7 @@ ChgEmp <EmpID> NoMember 从协会去掉雇员
 
 
 
-用例7：现在运行薪水支付系统
+### 用例7：现在运行薪水支付系统
 
 执行Payday操作时，系统会找到所有应该在指定日期进行支付的雇员。接着系统确定出他们的应扣款项，并根据他们所选择的支付方式对他们进行支付。
 
