@@ -1,22 +1,30 @@
-package com.zavier;
+package com.zavier.affiliation;
 
+import com.zavier.Paycheck;
+import com.zavier.ServiceCharge;
+import com.zavier.affiliation.Affiliation;
+
+import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 工会
+ */
 public class UnionAffiliation implements Affiliation {
     private int memberId;
-    private double dues;
+    private BigDecimal dues;
     private List<ServiceCharge> serviceChargeList;
 
-    public UnionAffiliation(int memberId, double dues) {
+    public UnionAffiliation(int memberId, BigDecimal dues) {
         this.memberId = memberId;
         this.dues = dues;
         serviceChargeList = new ArrayList<>();
     }
 
-    public void addServiceCharge(LocalDate date, double dues) {
+    public void addServiceCharge(LocalDate date, BigDecimal dues) {
         ServiceCharge serviceCharge = new ServiceCharge(date, dues);
         serviceChargeList.add(serviceCharge);
     }
@@ -25,7 +33,7 @@ public class UnionAffiliation implements Affiliation {
         return memberId;
     }
 
-    public double getDues() {
+    public BigDecimal getDues() {
         return dues;
     }
 
@@ -39,18 +47,18 @@ public class UnionAffiliation implements Affiliation {
     }
 
     @Override
-    public double calculateDeductions(Paycheck pc) {
-        double totalDues = 0;
+    public BigDecimal calculateDeductions(Paycheck pc) {
+        BigDecimal totalDues = BigDecimal.ZERO;
         LocalDate startDate = pc.getPayPeriodStartDate();
         LocalDate endDate = pc.getPayPeriodEndDate();
         int fridays = numberOfFirdaysInPayPeriod(startDate, endDate);
         for (ServiceCharge serviceCharge : serviceChargeList) {
             LocalDate date = serviceCharge.getDate();
             if (date.compareTo(startDate) >= 0 && date.compareTo(endDate) <= 0) {
-                totalDues += serviceCharge.getAmount();
+                totalDues = totalDues.add(serviceCharge.getAmount());
             }
         }
-        totalDues += dues * fridays;
+        totalDues = totalDues.add(dues.multiply(BigDecimal.valueOf(fridays)));
         return totalDues;
     }
 

@@ -1,5 +1,7 @@
 package com.zavier;
 
+import com.zavier.affiliation.Affiliation;
+
 public abstract class ChangeAffiliationTransaction extends ChangeEmployeeTransaction {
 
     public ChangeAffiliationTransaction(int empId) {

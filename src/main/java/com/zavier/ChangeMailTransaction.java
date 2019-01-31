@@ -1,5 +1,8 @@
 package com.zavier;
 
+import com.zavier.paymethod.MailMethod;
+import com.zavier.paymethod.PaymentMethod;
+
 public class ChangeMailTransaction extends ChangeMethodTransaction {
 
     private String address;

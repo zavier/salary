@@ -1,14 +1,18 @@
 package com.zavier;
 
+import com.zavier.affiliation.Affiliation;
+import com.zavier.affiliation.UnionAffiliation;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class ServiceChargeTransaction implements Transaction {
 
     private int memberId;
     private LocalDate date;
-    private double charge;
+    private BigDecimal charge;
 
-    public ServiceChargeTransaction(int memberId, LocalDate date, double charge) {
+    public ServiceChargeTransaction(int memberId, LocalDate date, BigDecimal charge) {
         this.memberId = memberId;
         this.date = date;
         this.charge = charge;

@@ -2,16 +2,18 @@ package com.zavier;
 
 import com.zavier.classification.CommissionedClassification;
 import com.zavier.classification.PaymentClassification;
+import com.zavier.classification.SalesReceipt;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class SalesReceiptTransaction implements Transaction {
 
     private LocalDate date;
-    private double amount;
+    private BigDecimal amount;
     private int empid;
 
-    public SalesReceiptTransaction(LocalDate date, double amount, int empid) {
+    public SalesReceiptTransaction(LocalDate date, BigDecimal amount, int empid) {
         this.date = date;
         this.amount = amount;
         this.empid = empid;

@@ -1,20 +1,21 @@
 package com.zavier;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Paycheck {
     private LocalDate paydate;
     private LocalDate payPeriodStartDate;
     private LocalDate payPeriodEndDate;
-    private double grossPay;
-    private double deductions;
-    private double netPay;
+    private BigDecimal grossPay;
+    private BigDecimal deductions;
+    private BigDecimal netPay;
 
     public LocalDate getPayDate() {
         return paydate;
     }
 
-    public double getGrossPay() {
+    public BigDecimal getGrossPay() {
         return grossPay;
     }
 
@@ -34,23 +35,23 @@ public class Paycheck {
         this.payPeriodEndDate = payPeriodEndDate;
     }
 
-    public void setGrossPay(double grossPay) {
+    public void setGrossPay(BigDecimal grossPay) {
         this.grossPay = grossPay;
     }
 
-    public double getDeductions() {
+    public BigDecimal getDeductions() {
         return deductions;
     }
 
-    public void setDeductions(double deductions) {
+    public void setDeductions(BigDecimal deductions) {
         this.deductions = deductions;
     }
 
-    public double getNetPay() {
+    public BigDecimal getNetPay() {
         return netPay;
     }
 
-    public void setNetPay(double netPay) {
+    public void setNetPay(BigDecimal netPay) {
         this.netPay = netPay;
     }
 

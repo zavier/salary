@@ -1,5 +1,8 @@
 package com.zavier;
 
+import com.zavier.paymethod.DirectMethod;
+import com.zavier.paymethod.PaymentMethod;
+
 public class ChangeDirectTransaction extends ChangeMethodTransaction{
     private String bank;
     private String account;

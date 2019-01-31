@@ -1,16 +1,21 @@
-package com.zavier;
+package com.zavier.employee;
 
 import com.zavier.classification.HourlyClassification;
 import com.zavier.classification.PaymentClassification;
 import com.zavier.payschedule.PaymentSchedule;
 import com.zavier.payschedule.WeeklySchedule;
 
-public class AddHourlyEmployee extends AddEmployeeTransaction {
+import java.math.BigDecimal;
 
-    private double hourlyRate;
+/**
+ * 添加小时工雇员
+ */
+public class AddHourlyEmployee extends AbstractAddEmployeeTransaction {
 
-    public AddHourlyEmployee(int itsEmpid, String itsName, String itsAddress, double hourlyRate) {
-        super(itsEmpid, itsName, itsAddress);
+    private BigDecimal hourlyRate;
+
+    public AddHourlyEmployee(int empId, String name, String address, BigDecimal hourlyRate) {
+        super(empId, name, address);
         this.hourlyRate = hourlyRate;
     }
 
@@ -20,7 +25,7 @@ public class AddHourlyEmployee extends AddEmployeeTransaction {
     }
 
     @Override
-    public PaymentClassification getClassfication() {
+    public PaymentClassification getClassification() {
         return new HourlyClassification(hourlyRate);
     }
 }

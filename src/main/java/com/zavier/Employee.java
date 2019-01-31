@@ -1,9 +1,12 @@
 package com.zavier;
 
 
+import com.zavier.affiliation.Affiliation;
 import com.zavier.classification.PaymentClassification;
+import com.zavier.paymethod.PaymentMethod;
 import com.zavier.payschedule.PaymentSchedule;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Employee {
@@ -75,9 +78,9 @@ public class Employee {
     }
 
     public void payday(Paycheck pc) {
-        double grossPay = paymentClassfication.calculatePay(pc);
-        double deductions = affiliation.calculateDeductions(pc);
-        double netPay = grossPay - deductions;
+        BigDecimal grossPay = paymentClassfication.calculatePay(pc);
+        BigDecimal deductions = affiliation.calculateDeductions(pc);
+        BigDecimal netPay = grossPay.subtract(deductions);
         pc.setGrossPay(grossPay);
         pc.setDeductions(deductions);
         pc.setNetPay(netPay);

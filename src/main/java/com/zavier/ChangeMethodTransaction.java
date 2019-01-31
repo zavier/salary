@@ -1,5 +1,7 @@
 package com.zavier;
 
+import com.zavier.paymethod.PaymentMethod;
+
 public abstract class ChangeMethodTransaction extends ChangeEmployeeTransaction {
 
     public ChangeMethodTransaction(int empId) {

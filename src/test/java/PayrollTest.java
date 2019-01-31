@@ -1,8 +1,14 @@
 import com.zavier.*;
-import com.zavier.classification.CommissionedClassification;
-import com.zavier.classification.HourlyClassification;
-import com.zavier.classification.PaymentClassification;
-import com.zavier.classification.SalariedClassification;
+import com.zavier.affiliation.Affiliation;
+import com.zavier.affiliation.UnionAffiliation;
+import com.zavier.classification.*;
+import com.zavier.employee.AddCommissionedEmployee;
+import com.zavier.employee.AddHourlyEmployee;
+import com.zavier.employee.AddSalariedEmployee;
+import com.zavier.paymethod.DirectMethod;
+import com.zavier.paymethod.HoldMethod;
+import com.zavier.paymethod.MailMethod;
+import com.zavier.paymethod.PaymentMethod;
 import com.zavier.payschedule.BiWeeklySchedule;
 import com.zavier.payschedule.MonthlySchedule;
 import com.zavier.payschedule.PaymentSchedule;
@@ -10,13 +16,14 @@ import com.zavier.payschedule.WeeklySchedule;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class PayrollTest {
     @Test
     public void testAddSalariedEmployee() {
         int empId = 1;
-        AddSalariedEmployee t = new AddSalariedEmployee(empId, "Bob", "Home", 1000.00);
+        AddSalariedEmployee t = new AddSalariedEmployee(empId, "Bob", "Home", new BigDecimal("1000"));
         t.execute();
 
         Employee e = GpayrollDatabase.getEmployee(empId);
@@ -38,7 +45,7 @@ public class PayrollTest {
     @Test
     public void testAddHourlyEmployee() {
         int empId = 1;
-        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bob1", "Home1", 50);
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bob1", "Home1", new BigDecimal("50"));
         t.execute();
 
         Employee e = GpayrollDatabase.getEmployee(empId);
@@ -58,7 +65,7 @@ public class PayrollTest {
     @Test
     public void testAddCommissionedEmployee() {
         int empId = 1;
-        AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Bob2", "Home2", 2000,  0.2);
+        AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Bob2", "Home2", new BigDecimal("2000"),  new BigDecimal("0.2"));
         t.execute();
 
         Employee e = GpayrollDatabase.getEmployee(empId);
@@ -79,7 +86,7 @@ public class PayrollTest {
     public void testDeleteEmployee() {
         int empId = 3;
         AddCommissionedEmployee t = new AddCommissionedEmployee(empId,
-            "Lance", "Home", 2500, 3.2);
+            "Lance", "Home", new BigDecimal("2500"), new BigDecimal("3.2"));
         t.execute();
         {
             Employee e = GpayrollDatabase.getEmployee(empId);
@@ -96,7 +103,7 @@ public class PayrollTest {
     @Test
     public void testTimeCardTransaction() {
         int empId = 2;
-        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", new BigDecimal("15.25"));
         t.execute();
 
         LocalDate date = LocalDate.of(2001, 10, 31);
@@ -117,11 +124,11 @@ public class PayrollTest {
     @Test
     public void testSalesReceiptTransaction() {
         int empId = 2;
-        AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Bill", "Home", 2000, 0.2);
+        AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Bill", "Home", new BigDecimal("2000"), new BigDecimal("0.2"));
         t.execute();
 
         LocalDate date = LocalDate.of(2011, 5, 7);
-        SalesReceiptTransaction srt = new SalesReceiptTransaction(date, 8000, empId);
+        SalesReceiptTransaction srt = new SalesReceiptTransaction(date, new BigDecimal("8000"), empId);
         srt.execute();
 
         Employee e = GpayrollDatabase.getEmployee(empId);
@@ -130,37 +137,37 @@ public class PayrollTest {
         CommissionedClassification cc = (CommissionedClassification) e.getPaymentClassfication();
         SalesReceipt sr = cc.getSalesReceipt(date);
         Assert.assertNotNull(sr);
-        Assert.assertEquals(8000, sr.getAmount(), 0.0001);
+        Assert.assertEquals(new BigDecimal("8000"), sr.getAmount());
     }
 
     @Test
     public void testAddServiceCharge() {
         int empId = 2;
-        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", new BigDecimal("15.25"));
         t.execute();
 
         Employee e = GpayrollDatabase.getEmployee(empId);
         Assert.assertNotNull(e);
 
         int memberId = 86;
-        UnionAffiliation af = new UnionAffiliation(memberId, 12.5);
+        UnionAffiliation af = new UnionAffiliation(memberId, new BigDecimal("12.5"));
         e.setAffilication(af);
 
         GpayrollDatabase.addUnionMember(memberId, e);
         LocalDate date = LocalDate.of(2001, 11, 1);
-        ServiceChargeTransaction sct = new ServiceChargeTransaction(memberId, date, 12.95);
+        ServiceChargeTransaction sct = new ServiceChargeTransaction(memberId, date, new BigDecimal("12.95"));
         sct.execute();
 
         ServiceCharge sc = af.getServiceCharge(date);
         Assert.assertNotNull(sc);
-        Assert.assertEquals(12.95, sc.getAmount(), 0.0001);
+        Assert.assertEquals(new BigDecimal("12.95"), sc.getAmount());
 
     }
 
     @Test
     public void testChangeNameTransaction() {
         int empId = 2;
-        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", new BigDecimal("15.25"));
         t.execute();
 
         ChangeNameTransaction cnt = new ChangeNameTransaction(empId, "Bob");
@@ -175,10 +182,10 @@ public class PayrollTest {
     public void testChangeHourlyTransaction() {
         int empId = 3;
         AddCommissionedEmployee t = new AddCommissionedEmployee(empId,
-            "Lance", "Home", 2500, 3.2);
+            "Lance", "Home", new BigDecimal("2500"), new BigDecimal("3.2"));
         t.execute();
 
-        ChangeHourlyTransaction cht = new ChangeHourlyTransaction(empId, 27.52);
+        ChangeHourlyTransaction cht = new ChangeHourlyTransaction(empId, new BigDecimal("27.52"));
         cht.execute();
 
         Employee e = GpayrollDatabase.getEmployee(empId);
@@ -187,7 +194,7 @@ public class PayrollTest {
         PaymentClassification pc = e.getPaymentClassfication();
         Assert.assertNotNull(pc);
         HourlyClassification hc = (HourlyClassification) pc;
-        Assert.assertEquals(27.52, hc.getRate(), 0.0001);
+        Assert.assertEquals(new BigDecimal("27.52"), hc.getRate());
 
         PaymentSchedule ps = e.getPaymentSchedule();
         WeeklySchedule ws = (WeeklySchedule) ps;
@@ -199,10 +206,10 @@ public class PayrollTest {
     public void testChangeSalariedTransaction() {
         int empId = 3;
         AddHourlyEmployee t = new AddHourlyEmployee(empId,
-            "Lance", "Home", 31.2);
+            "Lance", "Home", new BigDecimal("31.2"));
         t.execute();
 
-        ChangeSalariedTransaction cht = new ChangeSalariedTransaction(empId, 3000);
+        ChangeSalariedTransaction cht = new ChangeSalariedTransaction(empId, new BigDecimal("3000"));
         cht.execute();
 
         Employee e = GpayrollDatabase.getEmployee(empId);
@@ -210,7 +217,7 @@ public class PayrollTest {
 
         PaymentClassification pc = e.getPaymentClassfication();
         Assert.assertNotNull(pc);
-        SalariedClassification sc = (SalariedClassification) pc;
+//        SalariedClassification sc = (SalariedClassification) pc;
 //        Assert.assertEquals(3000, sc.calculatePay(), 0.0001);
 
         PaymentSchedule ps = e.getPaymentSchedule();
@@ -222,10 +229,11 @@ public class PayrollTest {
     public void testChangeCommissionedTransaction() {
         int empId = 3;
         AddSalariedEmployee t = new AddSalariedEmployee(empId, "Lance", "Home",
-            2900);
+                new BigDecimal("2900"));
         t.execute();
 
-        ChangeCommissionedTransaction cht = new ChangeCommissionedTransaction(empId, 3000, 0.4);
+        ChangeCommissionedTransaction cht = new ChangeCommissionedTransaction(empId, new BigDecimal("3000"),
+                new BigDecimal("0.4"));
         cht.execute();
 
         Employee e = GpayrollDatabase.getEmployee(empId);
@@ -235,7 +243,7 @@ public class PayrollTest {
         Assert.assertNotNull(pc);
         CommissionedClassification cc = (CommissionedClassification) pc;
 //        Assert.assertEquals(3000, cc.calculatePay(), 0.0001);
-        Assert.assertEquals(0.4, cc.getCommissionRate(), 0.0001);
+        Assert.assertEquals(new BigDecimal("0.4"), cc.getCommissionRate());
 
         PaymentSchedule ps = e.getPaymentSchedule();
         BiWeeklySchedule ms = (BiWeeklySchedule) ps;
@@ -246,7 +254,7 @@ public class PayrollTest {
     public void testChangeDirectTransaction() {
         int empId = 3;
         AddSalariedEmployee t = new AddSalariedEmployee(empId, "Lance", "Home",
-            2900);
+                new BigDecimal("2900"));
         t.execute();
 
         ChangeDirectTransaction cdt = new ChangeDirectTransaction(empId, "bank1", "11232");
@@ -266,7 +274,7 @@ public class PayrollTest {
     @Test
     public void testChangeHoldTransaction() {
         int empId = 3;
-        AddSalariedEmployee t = new AddSalariedEmployee(empId, "Lance", "Home", 2900);
+        AddSalariedEmployee t = new AddSalariedEmployee(empId, "Lance", "Home", new BigDecimal("2900"));
         t.execute();
 
         ChangeHoldTransaction cht = new ChangeHoldTransaction(empId);
@@ -283,7 +291,7 @@ public class PayrollTest {
     @Test
     public void testChangeMailTransaction() {
         int empId = 3;
-        AddSalariedEmployee t = new AddSalariedEmployee(empId, "Lance", "Home", 2900);
+        AddSalariedEmployee t = new AddSalariedEmployee(empId, "Lance", "Home", new BigDecimal("2900"));
         t.execute();
 
         ChangeMailTransaction cht = new ChangeMailTransaction(empId, "Home1");
@@ -303,44 +311,44 @@ public class PayrollTest {
     public void tesetChangeMemberTransaction() {
         int empId = 2;
         int memberId = 7734;
-        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", new BigDecimal("15.25"));
         t.execute();
 
-        ChangeMemberTransaction cmt = new ChangeMemberTransaction(empId, memberId, 99.42);
+        ChangeMemberTransaction cmt = new ChangeMemberTransaction(empId, memberId, new BigDecimal("99.42"));
         cmt.execute();
 
         Employee e = GpayrollDatabase.getEmployee(empId);
         Affiliation af = e.getAffiliation();
         Assert.assertTrue(af instanceof UnionAffiliation);
         UnionAffiliation uf = (UnionAffiliation) af;
-        Assert.assertEquals(99.42, uf.getDues(), 0.0001);
+        Assert.assertEquals(new BigDecimal("99.42"), uf.getDues());
         Employee member = GpayrollDatabase.getUnionMember(memberId);
-        Assert.assertTrue(e == member);
+        Assert.assertSame(e, member);
     }
 
     @Test
     public void testPaySingleSalariedEmployee() {
         int empId = 1;
         AddSalariedEmployee t = new AddSalariedEmployee(empId, "Bob", "Home",
-            1000);
+                new BigDecimal("1000"));
         t.execute();
 
         LocalDate payDate = LocalDate.of(2001, 11, 30);
         PaydayTransaction pt = new PaydayTransaction(payDate);
         pt.execute();
         Paycheck pc = pt.getPaycheck(empId);
-        Assert.assertTrue(pc.getPayDate() == payDate);
-        Assert.assertEquals(1000, pc.getGrossPay(), 0.0001);
+        Assert.assertEquals(pc.getPayDate(), payDate);
+        Assert.assertEquals(new BigDecimal("1000"), pc.getGrossPay());
 //        Assert.assertEquals("Hold", pc.getField("Disposition"));
-        Assert.assertEquals(0.0, pc.getDeductions(), 0.0001);
-        Assert.assertEquals(1000, pc.getNetPay(), 0.0001);
+        Assert.assertEquals(BigDecimal.ZERO, pc.getDeductions());
+        Assert.assertEquals(new BigDecimal("1000"), pc.getNetPay());
     }
 
     @Test
     public void testPaySingleSalariedEmployeeOnWrongDate() {
         int empId = 1;
         AddSalariedEmployee t = new AddSalariedEmployee(empId, "Bob", "Home",
-            1000);
+                new BigDecimal("1000"));
         t.execute();
 
         LocalDate payDate = LocalDate.of(2001, 11, 29);
@@ -353,29 +361,29 @@ public class PayrollTest {
     @Test
     public void testPaySingleHourlyEmployeeNoTimeCards() {
         int empId = 2;
-        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", new BigDecimal("15.25"));
         t.execute();
 
         LocalDate date = LocalDate.of(2001, 11, 9);
         PaydayTransaction pt = new PaydayTransaction(date);
         pt.execute();
-        validatePaycheck(pt, empId, date, 0.0);
+        validatePaycheck(pt, empId, date, BigDecimal.ZERO);
     }
 
-    private void validatePaycheck(PaydayTransaction pt, int empId, LocalDate date, double pay) {
+    private void validatePaycheck(PaydayTransaction pt, int empId, LocalDate date, BigDecimal pay) {
         Paycheck pc = pt.getPaycheck(empId);
         Assert.assertNotNull(pc);
         Assert.assertEquals(date, pc.getPayPeriodEndDate());
-        Assert.assertEquals(pay, pc.getGrossPay(), 0.0001);
+        Assert.assertEquals(pay.compareTo(pc.getGrossPay()), 0);
 //        Assert.assertEquals("Hold", pc.geField("Disposition"));
-        Assert.assertEquals(0.0, pc.getDeductions(), 0.0001);
-        Assert.assertEquals(pay, pc.getNetPay(), 0.0001);
+        Assert.assertEquals(BigDecimal.ZERO, pc.getDeductions());
+        Assert.assertSame(pay.compareTo(pc.getNetPay()), 0);
     }
 
     @Test
     public void testPaySingleHourlyEmployeeOneTimeCard() {
         int empId = 2;
-        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", new BigDecimal("15.25"));
         t.execute();
 
         LocalDate date = LocalDate.of(2001, 11, 9);
@@ -385,13 +393,13 @@ public class PayrollTest {
         PaydayTransaction pt = new PaydayTransaction(date);
         pt.execute();
 
-        validatePaycheck(pt, empId, date, 30.5);
+        validatePaycheck(pt, empId, date, new BigDecimal("30.5"));
     }
 
     @Test
     public void testPaySingleHourlyEmployeeOvertimeOneTimeCard() {
         int empId = 2;
-        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", new BigDecimal("15.25"));
         t.execute();
 
         LocalDate date = LocalDate.of(2001, 11, 9);
@@ -400,13 +408,15 @@ public class PayrollTest {
 
         PaydayTransaction pt = new PaydayTransaction(date);
         pt.execute();
-        validatePaycheck(pt, empId, date, (8 + 1.5) * 15.25);
+
+        BigDecimal res = new BigDecimal("8").add(new BigDecimal("1.5")).multiply(new BigDecimal("15.25"));
+        validatePaycheck(pt, empId, date, res);
     }
 
     @Test
     public void testPaysingleHourlyEmployeeOnWrongDate() {
         int empId = 2;
-        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", new BigDecimal("15.25"));
         t.execute();
 
         LocalDate date = LocalDate.of(2001, 11, 8);
@@ -423,7 +433,7 @@ public class PayrollTest {
     @Test
     public void testPaySingleHourlyEmployeeTwoTimeCards() {
         int empId = 2;
-        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", new BigDecimal("15.25"));
         t.execute();
 
         LocalDate date = LocalDate.of(2001, 11, 9);
@@ -435,13 +445,13 @@ public class PayrollTest {
 
         PaydayTransaction pt = new PaydayTransaction(date);
         pt.execute();
-        validatePaycheck(pt, empId, date, 7 * 15.25);
+        validatePaycheck(pt, empId, date, new BigDecimal("7").multiply(new BigDecimal("15.25")));
     }
 
     @Test
     public void testPaySingHourlyEmployeeWithTimeCardsSpanningTwoPayPeriods() {
         int empId = 2;
-        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.25);
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", new BigDecimal("15.25"));
         t.execute();
 
         LocalDate payDate = LocalDate.of(2001, 11, 9);
@@ -455,7 +465,7 @@ public class PayrollTest {
         PaydayTransaction pt = new PaydayTransaction(payDate);
         pt.execute();
 
-        validatePaycheck(pt, empId, payDate, 2 * 15.25);
+        validatePaycheck(pt, empId, payDate, new BigDecimal("2").multiply(new BigDecimal("15.25")));
     }
 
     private void emptyRunningFirstWeek(LocalDate date) {
@@ -467,7 +477,8 @@ public class PayrollTest {
     @Test
     public void testPaySingleCommissionEmployeeNoSalesReceipts() {
         int empId = 2;
-        AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Bill", "Home", 1200, 0.23);
+        AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Bill", "Home",
+                new BigDecimal("1200"), new BigDecimal("0.23"));
         t.execute();
 
         LocalDate firstWeekDate = LocalDate.of(2001, 11, 9);
@@ -476,14 +487,14 @@ public class PayrollTest {
         LocalDate date1 = LocalDate.of(2001, 11, 16);
         PaydayTransaction pt1 = new PaydayTransaction(date1);
         pt1.execute();
-        validatePaycheck(pt1, empId, date1, 1200);
+        validatePaycheck(pt1, empId, date1, new BigDecimal("1200"));
     }
 
     @Test
     public void testPaySingleCommissionEmployeeOneSalesReceipt() {
         int empId = 2;
         AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Bill",
-            "Home", 1200, 0.23);
+            "Home", new BigDecimal("1200"), new BigDecimal("0.23"));
         t.execute();
 
         LocalDate firstWeekDate = LocalDate.of(2001, 11, 9);
@@ -491,14 +502,14 @@ public class PayrollTest {
 
 
         LocalDate date1 = LocalDate.of(2001, 11, 9);
-        SalesReceiptTransaction srt = new SalesReceiptTransaction(date1, 5000,
+        SalesReceiptTransaction srt = new SalesReceiptTransaction(date1, new BigDecimal("5000"),
             empId);
         srt.execute();
 
         PaydayTransaction pt = new PaydayTransaction(date1);
         pt.execute();
-
-        validatePaycheck(pt, empId, date1, 1200 + 5000 * 0.23);
+        BigDecimal res = new BigDecimal("1200").add(new BigDecimal("5000").multiply(new BigDecimal("0.23")));
+        validatePaycheck(pt, empId, date1, res);
     }
 
 
@@ -506,14 +517,14 @@ public class PayrollTest {
     public void testPaysingleCommissionEmployeeOnWrongDate() {
         int empId = 2;
         AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Bill",
-            "Home", 1200, 0.23);
+            "Home", new BigDecimal("1200"), new BigDecimal("0.23"));
         t.execute();
 
         LocalDate firstWeekDate = LocalDate.of(2001, 11, 9);
         emptyRunningFirstWeek(firstWeekDate);
 
         LocalDate date1 = LocalDate.of(2001, 11, 10);
-        SalesReceiptTransaction srt = new SalesReceiptTransaction(date1, 5000,
+        SalesReceiptTransaction srt = new SalesReceiptTransaction(date1, new BigDecimal("5000"),
             empId);
         srt.execute();
 
@@ -528,31 +539,33 @@ public class PayrollTest {
     public void testPaySingleCommissionEmployeeTwoSalesReceipts() {
         int empId = 2;
         AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Bill",
-            "Home", 1200, 0.23);
+            "Home", new BigDecimal("1200"), new BigDecimal("0.23"));
         t.execute();
 
         LocalDate firstWeekDate = LocalDate.of(2001, 11, 2);
         emptyRunningFirstWeek(firstWeekDate);
 
         LocalDate date1 = LocalDate.of(2001, 11, 9);
-        SalesReceiptTransaction srt = new SalesReceiptTransaction(date1, 5000,
+        SalesReceiptTransaction srt = new SalesReceiptTransaction(date1, new BigDecimal("5000"),
             empId);
         srt.execute();
         SalesReceiptTransaction srt1 = new SalesReceiptTransaction(
-            LocalDate.of(2001, 11, 8), 3000,
+            LocalDate.of(2001, 11, 8), new BigDecimal("3000"),
             empId);
         srt1.execute();
 
         PaydayTransaction pt = new PaydayTransaction(date1);
         pt.execute();
-        validatePaycheck(pt, empId, date1, 1200 + 8000 * 0.23);
+
+        BigDecimal res = new BigDecimal("1200").add(new BigDecimal("8000").multiply(new BigDecimal("0.23")));
+        validatePaycheck(pt, empId, date1, res);
     }
 
     @Test
     public void testPaySingCommissionEmployeeWithSalesReceiptsSpanningTwoPayPeriods() {
         int empId = 2;
         AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Bill",
-            "Home", 1200, 0.23);
+            "Home", new BigDecimal("1200"), new BigDecimal("0.23"));
         t.execute();
 
         LocalDate firstWeekDate = LocalDate.of(2001, 11, 2);
@@ -560,32 +573,33 @@ public class PayrollTest {
 
         LocalDate payDate = LocalDate.of(2001, 11, 9);
         LocalDate deteInPreviousPayPeriod = LocalDate.of(2001, 10, 26);
-        SalesReceiptTransaction srt1 = new SalesReceiptTransaction(payDate, 2500, empId);
+        SalesReceiptTransaction srt1 = new SalesReceiptTransaction(payDate, new BigDecimal("2500"), empId);
         srt1.execute();
         SalesReceiptTransaction srt2 = new SalesReceiptTransaction(deteInPreviousPayPeriod,
-            1800, empId);
+                new BigDecimal("1800"), empId);
         srt2.execute();
 
         PaydayTransaction pt = new PaydayTransaction(payDate);
         pt.execute();
 
-        validatePaycheck(pt, empId, payDate, 1200 + 2500 * 0.23);
+        BigDecimal res = new BigDecimal("1200").add(new BigDecimal("2500").multiply(new BigDecimal("0.23")));
+        validatePaycheck(pt, empId, payDate, res);
     }
 
     @Test
     public void testHourlyUnionMemberServiceCharge() {
         int empId = 1;
-        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.24);
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", new BigDecimal("15.24"));
         t.execute();
 
         int memberId = 7734;
         ChangeMemberTransaction cmt = new ChangeMemberTransaction(empId,
-            memberId, 9.42);
+            memberId, new BigDecimal("9.42"));
         cmt.execute();
 
         LocalDate payDate = LocalDate.of(2001, 11, 9);
         ServiceChargeTransaction sct = new ServiceChargeTransaction(memberId,
-            payDate, 19.42);
+            payDate, new BigDecimal("19.42"));
         sct.execute();
 
         TimeCardTransaction tct = new TimeCardTransaction(payDate, 8.0, empId);
@@ -596,21 +610,21 @@ public class PayrollTest {
 
         Paycheck pc = pt.getPaycheck(empId);
         Assert.assertEquals(pc.getPayPeriodEndDate(), payDate);
-        Assert.assertEquals(8 * 15.24, pc.getGrossPay(), 0.0001);
+        Assert.assertEquals(new BigDecimal("8").multiply(new BigDecimal("15.24")).compareTo(pc.getGrossPay()), 0);
 //        Assert.assertEquals("Hold", pc.getField("Dispositon"));
-        Assert.assertEquals(9.42 + 19.42, pc.getDeductions(), 0.0001);
-        Assert.assertEquals((8*15.24)-(9.42+19.42), pc.getNetPay(), 0.0001);
+        Assert.assertEquals(new BigDecimal("9.42").add(new BigDecimal("19.42")).compareTo(pc.getDeductions()), 0);
+        Assert.assertEquals(BigDecimal.valueOf((8*15.24)-(9.42+19.42)).compareTo(pc.getNetPay()), 0);
     }
 
     @Test
     public void testServiceChargesSpanningMultiplePayPeriods() {
         int empId = 1;
-        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", 15.24);
+        AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", new BigDecimal("15.24"));
         t.execute();
 
         int memberId = 7734;
         ChangeMemberTransaction cmt = new ChangeMemberTransaction(empId,
-            memberId, 9.42);
+            memberId, new BigDecimal("9.42"));
         cmt.execute();
 
         LocalDate earlyDate = LocalDate.of(2001, 11, 2);
@@ -618,13 +632,13 @@ public class PayrollTest {
         LocalDate lateDate = LocalDate.of(2001, 11, 16);
 
         ServiceChargeTransaction sct = new ServiceChargeTransaction(memberId,
-            payDate, 19.42);
+            payDate, new BigDecimal("19.42"));
         sct.execute();
         ServiceChargeTransaction sctEarly = new ServiceChargeTransaction(memberId,
-            earlyDate, 100);
+            earlyDate, new BigDecimal("100"));
         sctEarly.execute();
         ServiceChargeTransaction sctLate = new ServiceChargeTransaction(memberId,
-            lateDate, 200);
+            lateDate, new BigDecimal("200"));
         sctLate.execute();
 
         TimeCardTransaction tct = new TimeCardTransaction(payDate, 8.0, empId);
@@ -635,10 +649,10 @@ public class PayrollTest {
 
         Paycheck pc = pt.getPaycheck(empId);
         Assert.assertEquals(pc.getPayPeriodEndDate(), payDate);
-        Assert.assertEquals(8 * 15.24, pc.getGrossPay(), 0.0001);
+        Assert.assertSame(new BigDecimal("8").multiply(new BigDecimal("15.24")).compareTo(pc.getGrossPay()), 0);
 //        Assert.assertEquals("Hold", pc.geField("Disposition"));
-        Assert.assertEquals(9.42 + 19.42, pc.getDeductions(), 0.0001);
-        Assert.assertEquals((8 * 15.24) - (9.42 + 19.42), pc.getNetPay(), 0.0001);
+        Assert.assertEquals(new BigDecimal("9.42").add(new BigDecimal("19.42")), pc.getDeductions());
+        Assert.assertSame(BigDecimal.valueOf((8 * 15.24) - (9.42 + 19.42)).compareTo(pc.getNetPay()), 0);
 
     }
 }

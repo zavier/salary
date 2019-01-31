@@ -1,12 +1,13 @@
 package com.zavier;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class ServiceCharge {
     private LocalDate date;
-    private double charge;
+    private BigDecimal charge;
 
-    public ServiceCharge(LocalDate date, double charge) {
+    public ServiceCharge(LocalDate date, BigDecimal charge) {
         this.date = date;
         this.charge = charge;
     }
@@ -15,7 +16,7 @@ public class ServiceCharge {
         return date;
     }
 
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return charge;
     }
 }

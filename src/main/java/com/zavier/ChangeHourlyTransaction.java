@@ -5,17 +5,19 @@ import com.zavier.classification.PaymentClassification;
 import com.zavier.payschedule.PaymentSchedule;
 import com.zavier.payschedule.WeeklySchedule;
 
+import java.math.BigDecimal;
+
 public class ChangeHourlyTransaction extends ChangeClassificationTransaction {
 
-    private double hourlyRate;
+    private BigDecimal hourlyRate;
 
-    public ChangeHourlyTransaction(int empId, double hourlyRate) {
+    public ChangeHourlyTransaction(int empId, BigDecimal hourlyRate) {
         super(empId);
         this.hourlyRate = hourlyRate;
     }
 
     @Override
-    protected PaymentClassification getClassificiation() {
+    protected PaymentClassification getClassification() {
         return new HourlyClassification(hourlyRate);
     }
 

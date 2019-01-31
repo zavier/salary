@@ -1,7 +1,20 @@
-package com.zavier;
+package com.zavier.paymethod;
 
-public class DirectMethod implements PaymentMethod{
+import com.zavier.Paycheck;
+import com.zavier.paymethod.PaymentMethod;
+
+/**
+ * 薪水发到指定银行账号
+ */
+public class DirectMethod implements PaymentMethod {
+    /**
+     * 银行
+     */
     private String bank;
+
+    /**
+     * 账号
+     */
     private String account;
 
     public DirectMethod(String bank, String account) {

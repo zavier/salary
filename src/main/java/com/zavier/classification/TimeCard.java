@@ -1,7 +1,10 @@
-package com.zavier;
+package com.zavier.classification;
 
 import java.time.LocalDate;
 
+/**
+ * 工时记录卡
+ */
 public class TimeCard {
     private double itsHours;
     private LocalDate data;

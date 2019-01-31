@@ -2,6 +2,7 @@ package com.zavier;
 
 import com.zavier.classification.HourlyClassification;
 import com.zavier.classification.PaymentClassification;
+import com.zavier.classification.TimeCard;
 
 import java.time.LocalDate;
 

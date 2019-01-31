@@ -1,5 +1,9 @@
 package com.zavier;
 
+import com.zavier.affiliation.Affiliation;
+import com.zavier.affiliation.NoAffiliation;
+import com.zavier.affiliation.UnionAffiliation;
+
 public class ChangeUnffiliatedTransaction extends ChangeAffiliationTransaction {
 
     public ChangeUnffiliatedTransaction(int empId) {

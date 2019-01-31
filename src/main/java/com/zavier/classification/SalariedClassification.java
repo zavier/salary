@@ -2,15 +2,23 @@ package com.zavier.classification;
 
 import com.zavier.Paycheck;
 
-public class SalariedClassification extends PaymentClassification {
-    private double salary;
+import java.math.BigDecimal;
 
-    public SalariedClassification(double salary) {
+/**
+ * 月薪方式结薪
+ */
+public class SalariedClassification extends PaymentClassification {
+    /**
+     * 每月薪水
+     */
+    private BigDecimal salary;
+
+    public SalariedClassification(BigDecimal salary) {
         this.salary = salary;
     }
 
     @Override
-    public double calculatePay(Paycheck pc) {
+    public BigDecimal calculatePay(Paycheck pc) {
         return salary;
     }
 }

@@ -1,5 +1,8 @@
 package com.zavier;
 
+import com.zavier.paymethod.HoldMethod;
+import com.zavier.paymethod.PaymentMethod;
+
 public class ChangeHoldTransaction extends ChangeMethodTransaction{
 
     public ChangeHoldTransaction(int empId) {

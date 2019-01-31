@@ -1,17 +1,21 @@
-package com.zavier;
+package com.zavier.classification;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * 销售凭条
+ */
 public class SalesReceipt {
-    private double amount;
+    private BigDecimal amount;
     private LocalDate date;
 
-    public SalesReceipt(double amount, LocalDate date) {
+    public SalesReceipt(BigDecimal amount, LocalDate date) {
         this.amount = amount;
         this.date = date;
     }
 
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 

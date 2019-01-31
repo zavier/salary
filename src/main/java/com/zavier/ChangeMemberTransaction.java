@@ -1,11 +1,16 @@
 package com.zavier;
 
+import com.zavier.affiliation.Affiliation;
+import com.zavier.affiliation.UnionAffiliation;
+
+import java.math.BigDecimal;
+
 public class ChangeMemberTransaction extends ChangeAffiliationTransaction {
 
     private int memberId;
-    private double dues;
+    private BigDecimal dues;
 
-    public ChangeMemberTransaction(int empId, int memberId, double dues) {
+    public ChangeMemberTransaction(int empId, int memberId, BigDecimal dues) {
         super(empId);
         this.memberId = memberId;
         this.dues = dues;

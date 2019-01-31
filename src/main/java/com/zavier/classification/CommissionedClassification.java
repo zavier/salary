@@ -1,25 +1,38 @@
 package com.zavier.classification;
 
 import com.zavier.Paycheck;
-import com.zavier.SalesReceipt;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 底薪加销售提成结薪
+ */
 public class CommissionedClassification extends PaymentClassification {
+    /**
+     * 底薪
+     */
+    private BigDecimal salary;
 
-    private double salary;
-    private double commissionRate;
+    /**
+     * 销售提成比例
+     */
+    private BigDecimal commissionRate;
+
+    /**
+     * 销售凭条
+     */
     private List<SalesReceipt> salesReceiptList;
 
-    public CommissionedClassification(double salary, double commissionRate) {
+    public CommissionedClassification(BigDecimal salary, BigDecimal commissionRate) {
         this.salary = salary;
         this.commissionRate = commissionRate;
         salesReceiptList = new ArrayList<>();
     }
 
-    public double getCommissionRate() {
+    public BigDecimal getCommissionRate() {
         return commissionRate;
     }
 
@@ -37,14 +50,14 @@ public class CommissionedClassification extends PaymentClassification {
     }
 
     @Override
-    public double calculatePay(Paycheck pc) {
+    public BigDecimal calculatePay(Paycheck pc) {
         LocalDate payPeriod = pc.getPayDate();
-        int totalMoney = 0;
+        BigDecimal totalMoney = BigDecimal.ZERO;
         for (SalesReceipt salesReceipt : salesReceiptList) {
             if (isInPayPeriod(salesReceipt.getDate(), pc)) {
-                totalMoney += salesReceipt.getAmount();
+                totalMoney = totalMoney.add(salesReceipt.getAmount());
             }
         }
-        return totalMoney * commissionRate + salary;
+        return totalMoney.multiply(commissionRate).add(salary);
     }
 }

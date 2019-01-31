@@ -1,18 +1,23 @@
-package com.zavier;
+package com.zavier.employee;
 
 import com.zavier.classification.CommissionedClassification;
 import com.zavier.classification.PaymentClassification;
 import com.zavier.payschedule.BiWeeklySchedule;
 import com.zavier.payschedule.PaymentSchedule;
 
-public class AddCommissionedEmployee extends AddEmployeeTransaction {
+import java.math.BigDecimal;
 
-    private double salary;
-    private double commissionRate;
+/**
+ * 添加销售雇员
+ */
+public class AddCommissionedEmployee extends AbstractAddEmployeeTransaction {
 
-    public AddCommissionedEmployee(int itsEmpid, String itsName, String itsAddress, double salary,
-        double commissionRate) {
-        super(itsEmpid, itsName, itsAddress);
+    private BigDecimal salary;
+    private BigDecimal commissionRate;
+
+    public AddCommissionedEmployee(int empId, String name, String address, BigDecimal salary,
+                                   BigDecimal commissionRate) {
+        super(empId, name, address);
         this.salary = salary;
         this.commissionRate = commissionRate;
     }
@@ -23,7 +28,7 @@ public class AddCommissionedEmployee extends AddEmployeeTransaction {
     }
 
     @Override
-    public PaymentClassification getClassfication() {
+    public PaymentClassification getClassification() {
         return new CommissionedClassification(salary, commissionRate);
     }
 }

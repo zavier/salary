@@ -5,19 +5,21 @@ import com.zavier.classification.PaymentClassification;
 import com.zavier.payschedule.BiWeeklySchedule;
 import com.zavier.payschedule.PaymentSchedule;
 
+import java.math.BigDecimal;
+
 public class ChangeCommissionedTransaction extends ChangeClassificationTransaction {
 
-    private double salary;
-    private double commissionRate;
+    private BigDecimal salary;
+    private BigDecimal commissionRate;
 
-    public ChangeCommissionedTransaction(int empId, double salary, double commissionRate) {
+    public ChangeCommissionedTransaction(int empId, BigDecimal salary, BigDecimal commissionRate) {
         super(empId);
         this.salary = salary;
         this.commissionRate = commissionRate;
     }
 
     @Override
-    protected PaymentClassification getClassificiation() {
+    protected PaymentClassification getClassification() {
         return new CommissionedClassification(salary, commissionRate);
     }
 

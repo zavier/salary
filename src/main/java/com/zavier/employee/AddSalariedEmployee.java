@@ -1,4 +1,4 @@
-package com.zavier;
+package com.zavier.employee;
 
 
 import com.zavier.classification.PaymentClassification;
@@ -6,12 +6,20 @@ import com.zavier.classification.SalariedClassification;
 import com.zavier.payschedule.MonthlySchedule;
 import com.zavier.payschedule.PaymentSchedule;
 
-public class AddSalariedEmployee extends AddEmployeeTransaction {
+import java.math.BigDecimal;
 
-    private double itsSalary;
+/**
+ * 增加月薪雇员
+ */
+public class AddSalariedEmployee extends AbstractAddEmployeeTransaction {
 
-    public AddSalariedEmployee(int empid, String name, String address, double salary) {
-        super(empid, name, address);
+    /**
+     * 月薪
+     */
+    private BigDecimal itsSalary;
+
+    public AddSalariedEmployee(int empId, String name, String address, BigDecimal salary) {
+        super(empId, name, address);
         this.itsSalary = salary;
     }
 
@@ -21,7 +29,7 @@ public class AddSalariedEmployee extends AddEmployeeTransaction {
     }
 
     @Override
-    public PaymentClassification getClassfication() {
+    public PaymentClassification getClassification() {
         return new SalariedClassification(itsSalary);
     }
 }
