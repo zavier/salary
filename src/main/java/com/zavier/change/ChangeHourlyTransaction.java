@@ -1,4 +1,4 @@
-package com.zavier;
+package com.zavier.change;
 
 import com.zavier.classification.HourlyClassification;
 import com.zavier.classification.PaymentClassification;
@@ -7,7 +7,7 @@ import com.zavier.payschedule.WeeklySchedule;
 
 import java.math.BigDecimal;
 
-public class ChangeHourlyTransaction extends ChangeClassificationTransaction {
+public class ChangeHourlyTransaction extends BaseChangeClassificationTransaction {
 
     private BigDecimal hourlyRate;
 

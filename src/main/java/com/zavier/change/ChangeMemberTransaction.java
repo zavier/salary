@@ -1,11 +1,13 @@
-package com.zavier;
+package com.zavier.change;
 
+import com.zavier.employee.Employee;
+import com.zavier.GpayrollDatabase;
 import com.zavier.affiliation.Affiliation;
 import com.zavier.affiliation.UnionAffiliation;
 
 import java.math.BigDecimal;
 
-public class ChangeMemberTransaction extends ChangeAffiliationTransaction {
+public class ChangeMemberTransaction extends BaseChangeAffiliationTransaction {
 
     private int memberId;
     private BigDecimal dues;

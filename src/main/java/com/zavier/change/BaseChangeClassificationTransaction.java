@@ -1,11 +1,12 @@
-package com.zavier;
+package com.zavier.change;
 
+import com.zavier.employee.Employee;
 import com.zavier.classification.PaymentClassification;
 import com.zavier.payschedule.PaymentSchedule;
 
-public abstract class ChangeClassificationTransaction extends ChangeEmployeeTransaction {
+public abstract class BaseChangeClassificationTransaction extends BaseChangeEmployeeTransaction {
 
-    public ChangeClassificationTransaction(int empId) {
+    public BaseChangeClassificationTransaction(int empId) {
         super(empId);
     }
 

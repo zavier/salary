@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 /**
  * 增加月薪雇员
  */
-public class AddSalariedEmployee extends AbstractAddEmployeeTransaction {
+public class AddSalariedEmployee extends BaseAddEmployeeTransaction {
 
     /**
      * 月薪

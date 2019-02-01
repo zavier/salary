@@ -10,8 +10,11 @@ import java.math.BigDecimal;
 /**
  * 添加小时工雇员
  */
-public class AddHourlyEmployee extends AbstractAddEmployeeTransaction {
+public class AddHourlyEmployee extends BaseAddEmployeeTransaction {
 
+    /**
+     * 每小时薪水
+     */
     private BigDecimal hourlyRate;
 
     public AddHourlyEmployee(int empId, String name, String address, BigDecimal hourlyRate) {

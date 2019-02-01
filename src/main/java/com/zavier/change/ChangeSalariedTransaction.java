@@ -1,4 +1,4 @@
-package com.zavier;
+package com.zavier.change;
 
 import com.zavier.classification.PaymentClassification;
 import com.zavier.classification.SalariedClassification;
@@ -7,7 +7,7 @@ import com.zavier.payschedule.PaymentSchedule;
 
 import java.math.BigDecimal;
 
-public class ChangeSalariedTransaction extends ChangeClassificationTransaction {
+public class ChangeSalariedTransaction extends BaseChangeClassificationTransaction {
 
     private BigDecimal salary;
 

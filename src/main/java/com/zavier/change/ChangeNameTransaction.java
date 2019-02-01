@@ -1,6 +1,8 @@
-package com.zavier;
+package com.zavier.change;
 
-public class ChangeNameTransaction extends ChangeEmployeeTransaction {
+import com.zavier.employee.Employee;
+
+public class ChangeNameTransaction extends BaseChangeEmployeeTransaction {
 
     private String name;
 

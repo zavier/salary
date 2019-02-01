@@ -1,9 +1,9 @@
-package com.zavier;
+package com.zavier.change;
 
 import com.zavier.paymethod.HoldMethod;
 import com.zavier.paymethod.PaymentMethod;
 
-public class ChangeHoldTransaction extends ChangeMethodTransaction{
+public class ChangeHoldTransaction extends ChangeMethodTransaction {
 
     public ChangeHoldTransaction(int empId) {
         super(empId);

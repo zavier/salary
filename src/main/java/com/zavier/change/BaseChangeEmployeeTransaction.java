@@ -1,9 +1,13 @@
-package com.zavier;
+package com.zavier.change;
 
-public abstract class ChangeEmployeeTransaction implements Transaction{
+import com.zavier.employee.Employee;
+import com.zavier.GpayrollDatabase;
+import com.zavier.Transaction;
+
+public abstract class BaseChangeEmployeeTransaction implements Transaction {
     private int empId;
 
-    public ChangeEmployeeTransaction(int empId) {
+    public BaseChangeEmployeeTransaction(int empId) {
         this.empId = empId;
     }
 

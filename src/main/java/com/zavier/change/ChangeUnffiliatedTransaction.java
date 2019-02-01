@@ -1,10 +1,12 @@
-package com.zavier;
+package com.zavier.change;
 
+import com.zavier.employee.Employee;
+import com.zavier.GpayrollDatabase;
 import com.zavier.affiliation.Affiliation;
 import com.zavier.affiliation.NoAffiliation;
 import com.zavier.affiliation.UnionAffiliation;
 
-public class ChangeUnffiliatedTransaction extends ChangeAffiliationTransaction {
+public class ChangeUnffiliatedTransaction extends BaseChangeAffiliationTransaction {
 
     public ChangeUnffiliatedTransaction(int empId) {
         super(empId);

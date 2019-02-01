@@ -1,6 +1,7 @@
-package com.zavier;
+package com.zavier.employee;
 
 
+import com.zavier.Paycheck;
 import com.zavier.affiliation.Affiliation;
 import com.zavier.classification.PaymentClassification;
 import com.zavier.paymethod.PaymentMethod;
@@ -10,7 +11,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Employee {
-    private int id;
+    private Integer id;
     private String name;
     private String address;
     private PaymentSchedule paymentSchedule;
@@ -18,10 +19,18 @@ public class Employee {
     private PaymentClassification paymentClassfication;
     private Affiliation affiliation;
 
-    public Employee(int id, String name, String address) {
+    public Employee(Integer id, String name, String address) {
         this.id = id;
         this.name = name;
         this.address = address;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {

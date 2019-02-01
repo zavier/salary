@@ -2,6 +2,7 @@ package com.zavier;
 
 import com.zavier.affiliation.Affiliation;
 import com.zavier.affiliation.UnionAffiliation;
+import com.zavier.employee.Employee;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

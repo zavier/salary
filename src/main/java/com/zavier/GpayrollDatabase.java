@@ -1,5 +1,7 @@
 package com.zavier;
 
+import com.zavier.employee.Employee;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -9,12 +11,16 @@ public class GpayrollDatabase {
 
     private static Map<Integer, Employee> unionMemberMap = new HashMap<>();
 
-    public static void addEmployee(int empid, Employee e) {
-        payrollDatabase.addEmployee(empid, e);
+    public static void addEmployee(int empId, Employee e) {
+        payrollDatabase.addEmployee(empId, e);
     }
 
-    public static Employee getEmployee(int empid) {
-        return payrollDatabase.getEmployee(empid);
+    public static Employee getEmployee(int empId) {
+        return payrollDatabase.getEmployee(empId);
+    }
+
+    public static void setEmployee(Employee e) {
+        payrollDatabase.setEmployee(e);
     }
 
     public static void deleteEmployee(int empId) {

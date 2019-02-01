@@ -1,7 +1,6 @@
 package com.zavier.employee;
 
 
-import com.zavier.Employee;
 import com.zavier.GpayrollDatabase;
 import com.zavier.Transaction;
 import com.zavier.affiliation.NoAffiliation;
@@ -13,13 +12,13 @@ import com.zavier.payschedule.PaymentSchedule;
 /**
  * 增加雇员基类
  */
-public abstract class AbstractAddEmployeeTransaction implements Transaction {
+public abstract class BaseAddEmployeeTransaction implements Transaction {
 
     private int empId;
     private String name;
     private String address;
 
-    public AbstractAddEmployeeTransaction(int empId, String name, String address) {
+    public BaseAddEmployeeTransaction(int empId, String name, String address) {
         this.empId = empId;
         this.name = name;
         this.address = address;

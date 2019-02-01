@@ -10,9 +10,16 @@ import java.math.BigDecimal;
 /**
  * 添加销售雇员
  */
-public class AddCommissionedEmployee extends AbstractAddEmployeeTransaction {
+public class AddCommissionedEmployee extends BaseAddEmployeeTransaction {
 
+    /**
+     * 底薪
+     */
     private BigDecimal salary;
+
+    /**
+     * 销售提成比例
+     */
     private BigDecimal commissionRate;
 
     public AddCommissionedEmployee(int empId, String name, String address, BigDecimal salary,
