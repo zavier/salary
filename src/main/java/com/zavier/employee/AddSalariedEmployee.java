@@ -1,7 +1,7 @@
 package com.zavier.employee;
 
 
-import com.zavier.classification.PaymentClassification;
+import com.zavier.classification.BasePaymentClassification;
 import com.zavier.classification.SalariedClassification;
 import com.zavier.payschedule.MonthlySchedule;
 import com.zavier.payschedule.PaymentSchedule;
@@ -29,7 +29,7 @@ public class AddSalariedEmployee extends BaseAddEmployeeTransaction {
     }
 
     @Override
-    public PaymentClassification getClassification() {
+    public BasePaymentClassification getClassification() {
         return new SalariedClassification(itsSalary);
     }
 }

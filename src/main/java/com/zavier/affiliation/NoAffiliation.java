@@ -1,7 +1,6 @@
 package com.zavier.affiliation;
 
-import com.zavier.Paycheck;
-import com.zavier.affiliation.Affiliation;
+import com.zavier.pay.Paycheck;
 
 import java.math.BigDecimal;
 

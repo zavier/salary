@@ -4,6 +4,8 @@ import com.zavier.affiliation.UnionAffiliation;
 import com.zavier.classification.*;
 import com.zavier.employee.*;
 import com.zavier.change.*;
+import com.zavier.pay.Paycheck;
+import com.zavier.pay.PaydayTransaction;
 import com.zavier.paymethod.DirectMethod;
 import com.zavier.paymethod.HoldMethod;
 import com.zavier.paymethod.MailMethod;
@@ -29,7 +31,7 @@ public class PayrollTest {
         Assert.assertEquals("Bob", e.getName());
         Assert.assertEquals("Home", e.getAddress());
 
-        PaymentClassification pc = e.getPaymentClassfication();
+        PaymentClassification pc = e.getPaymentClassification();
         Assert.assertTrue(pc instanceof SalariedClassification);
 //        Assert.assertEquals(1000.00, pc.calculatePay(), 0.0001);
 
@@ -51,7 +53,7 @@ public class PayrollTest {
         Assert.assertEquals("Bob1", e.getName());
         Assert.assertEquals("Home1", e.getAddress());
 
-        PaymentClassification pc = e.getPaymentClassfication();
+        PaymentClassification pc = e.getPaymentClassification();
         Assert.assertTrue(pc instanceof HourlyClassification);
 
         PaymentSchedule ps = e.getPaymentSchedule();
@@ -71,7 +73,7 @@ public class PayrollTest {
         Assert.assertEquals("Bob2", e.getName());
         Assert.assertEquals("Home2", e.getAddress());
 
-        PaymentClassification pc = e.getPaymentClassfication();
+        PaymentClassification pc = e.getPaymentClassification();
         Assert.assertTrue(pc instanceof CommissionedClassification);
 
         PaymentSchedule ps = e.getPaymentSchedule();
@@ -112,7 +114,7 @@ public class PayrollTest {
         Employee e = GpayrollDatabase.getEmployee(empId);
         Assert.assertNotNull(e);
 
-        HourlyClassification hc = (HourlyClassification) e.getPaymentClassfication();
+        HourlyClassification hc = (HourlyClassification) e.getPaymentClassification();
         Assert.assertNotNull(hc);
         TimeCard tc = hc.getTimeCard(date);
         Assert.assertNotNull(tc);
@@ -133,7 +135,7 @@ public class PayrollTest {
         Employee e = GpayrollDatabase.getEmployee(empId);
         Assert.assertNotNull(e);
 
-        CommissionedClassification cc = (CommissionedClassification) e.getPaymentClassfication();
+        CommissionedClassification cc = (CommissionedClassification) e.getPaymentClassification();
         SalesReceipt sr = cc.getSalesReceipt(date);
         Assert.assertNotNull(sr);
         Assert.assertEquals(new BigDecimal("8000"), sr.getAmount());
@@ -150,7 +152,7 @@ public class PayrollTest {
 
         int memberId = 86;
         UnionAffiliation af = new UnionAffiliation(memberId, new BigDecimal("12.5"));
-        e.setAffilication(af);
+        e.setAffiliation(af);
 
         GpayrollDatabase.addUnionMember(memberId, e);
         LocalDate date = LocalDate.of(2001, 11, 1);
@@ -190,7 +192,7 @@ public class PayrollTest {
         Employee e = GpayrollDatabase.getEmployee(empId);
         Assert.assertNotNull(e);
 
-        PaymentClassification pc = e.getPaymentClassfication();
+        PaymentClassification pc = e.getPaymentClassification();
         Assert.assertNotNull(pc);
         HourlyClassification hc = (HourlyClassification) pc;
         Assert.assertEquals(new BigDecimal("27.52"), hc.getRate());
@@ -214,7 +216,7 @@ public class PayrollTest {
         Employee e = GpayrollDatabase.getEmployee(empId);
         Assert.assertNotNull(e);
 
-        PaymentClassification pc = e.getPaymentClassfication();
+        PaymentClassification pc = e.getPaymentClassification();
         Assert.assertNotNull(pc);
 //        SalariedClassification sc = (SalariedClassification) pc;
 //        Assert.assertEquals(3000, sc.calculatePay(), 0.0001);
@@ -238,7 +240,7 @@ public class PayrollTest {
         Employee e = GpayrollDatabase.getEmployee(empId);
         Assert.assertNotNull(e);
 
-        PaymentClassification pc = e.getPaymentClassfication();
+        PaymentClassification pc = e.getPaymentClassification();
         Assert.assertNotNull(pc);
         CommissionedClassification cc = (CommissionedClassification) pc;
 //        Assert.assertEquals(3000, cc.calculatePay(), 0.0001);

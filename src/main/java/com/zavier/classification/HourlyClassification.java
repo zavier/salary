@@ -1,6 +1,6 @@
 package com.zavier.classification;
 
-import com.zavier.Paycheck;
+import com.zavier.pay.Paycheck;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * 时薪结薪
  */
-public class HourlyClassification extends PaymentClassification {
+public class HourlyClassification extends BasePaymentClassification {
 
     private BigDecimal hourlyRate;
     private List<TimeCard> timeCardList;

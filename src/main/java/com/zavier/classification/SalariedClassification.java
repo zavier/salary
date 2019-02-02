@@ -1,13 +1,13 @@
 package com.zavier.classification;
 
-import com.zavier.Paycheck;
+import com.zavier.pay.Paycheck;
 
 import java.math.BigDecimal;
 
 /**
  * 月薪方式结薪
  */
-public class SalariedClassification extends PaymentClassification {
+public class SalariedClassification extends BasePaymentClassification {
     /**
      * 每月薪水
      */

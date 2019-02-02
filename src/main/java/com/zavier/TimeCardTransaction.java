@@ -1,6 +1,7 @@
 package com.zavier;
 
 import com.zavier.classification.HourlyClassification;
+import com.zavier.classification.BasePaymentClassification;
 import com.zavier.classification.PaymentClassification;
 import com.zavier.classification.TimeCard;
 import com.zavier.employee.Employee;
@@ -37,7 +38,7 @@ public class TimeCardTransaction implements Transaction {
     public void execute() {
         Employee e = GpayrollDatabase.getEmployee(empId);
         if (e != null) {
-            PaymentClassification pc = e.getPaymentClassfication();
+            PaymentClassification pc = e.getPaymentClassification();
             if (pc instanceof HourlyClassification) {
                 HourlyClassification hc = (HourlyClassification) pc;
                 hc.addTimeCard(new TimeCard(date, hours));

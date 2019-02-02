@@ -7,6 +7,9 @@ import com.zavier.affiliation.UnionAffiliation;
 
 import java.math.BigDecimal;
 
+/**
+ * 修改雇员组织信息
+ */
 public class ChangeMemberTransaction extends BaseChangeAffiliationTransaction {
 
     private int memberId;

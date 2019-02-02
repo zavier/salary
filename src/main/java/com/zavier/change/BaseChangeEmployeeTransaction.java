@@ -4,6 +4,9 @@ import com.zavier.employee.Employee;
 import com.zavier.GpayrollDatabase;
 import com.zavier.Transaction;
 
+/**
+ * 改变雇员信息抽象类
+ */
 public abstract class BaseChangeEmployeeTransaction implements Transaction {
     private int empId;
 

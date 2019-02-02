@@ -3,7 +3,10 @@ package com.zavier.change;
 import com.zavier.paymethod.DirectMethod;
 import com.zavier.paymethod.PaymentMethod;
 
-public class ChangeDirectTransaction extends ChangeMethodTransaction {
+/**
+ * 修改支付方式为付款到指定银行卡
+ */
+public class ChangeDirectTransaction extends BaseChangeMethodTransaction {
     private String bank;
     private String account;
 

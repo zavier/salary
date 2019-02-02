@@ -4,7 +4,7 @@ package com.zavier.employee;
 import com.zavier.GpayrollDatabase;
 import com.zavier.Transaction;
 import com.zavier.affiliation.NoAffiliation;
-import com.zavier.classification.PaymentClassification;
+import com.zavier.classification.BasePaymentClassification;
 import com.zavier.paymethod.HoldMethod;
 import com.zavier.paymethod.PaymentMethod;
 import com.zavier.payschedule.PaymentSchedule;
@@ -26,14 +26,14 @@ public abstract class BaseAddEmployeeTransaction implements Transaction {
 
     @Override
     public void execute() {
-        PaymentClassification pc = getClassification();
+        BasePaymentClassification pc = getClassification();
         PaymentSchedule ps = getSchedule();
         PaymentMethod pm = new HoldMethod();
         Employee e = new Employee(empId, name, address);
-        e.setPaymentClassfication(pc);
+        e.setPaymentClassification(pc);
         e.setPaymentSchedule(ps);
         e.setPaymentMethod(pm);
-        e.setAffilication(new NoAffiliation());
+        e.setAffiliation(new NoAffiliation());
         GpayrollDatabase.addEmployee(empId, e);
     }
 
@@ -47,5 +47,5 @@ public abstract class BaseAddEmployeeTransaction implements Transaction {
      * 获取计薪方式
      * @return
      */
-    public abstract PaymentClassification getClassification();
+    public abstract BasePaymentClassification getClassification();
 }

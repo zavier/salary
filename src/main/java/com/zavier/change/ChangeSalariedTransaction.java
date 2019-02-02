@@ -1,12 +1,15 @@
 package com.zavier.change;
 
-import com.zavier.classification.PaymentClassification;
+import com.zavier.classification.BasePaymentClassification;
 import com.zavier.classification.SalariedClassification;
 import com.zavier.payschedule.MonthlySchedule;
 import com.zavier.payschedule.PaymentSchedule;
 
 import java.math.BigDecimal;
 
+/**
+ * 修改计薪方式为月薪结算
+ */
 public class ChangeSalariedTransaction extends BaseChangeClassificationTransaction {
 
     private BigDecimal salary;
@@ -17,7 +20,7 @@ public class ChangeSalariedTransaction extends BaseChangeClassificationTransacti
     }
 
     @Override
-    protected PaymentClassification getClassification() {
+    protected BasePaymentClassification getClassification() {
         return new SalariedClassification(salary);
     }
 

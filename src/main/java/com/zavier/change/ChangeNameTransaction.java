@@ -2,6 +2,9 @@ package com.zavier.change;
 
 import com.zavier.employee.Employee;
 
+/**
+ * 修改雇员姓名
+ */
 public class ChangeNameTransaction extends BaseChangeEmployeeTransaction {
 
     private String name;

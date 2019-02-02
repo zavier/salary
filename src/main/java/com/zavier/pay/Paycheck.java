@@ -1,18 +1,55 @@
-package com.zavier;
+package com.zavier.pay;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * 用于保存支付时间相关信息
+ */
 public class Paycheck {
-    private LocalDate paydate;
+    /**
+     * 发薪日期
+     */
+    private LocalDate payDate;
+
+    /**
+     * 计算薪水-开始日期
+     */
     private LocalDate payPeriodStartDate;
+
+    /**
+     * 计算薪水-结束日期
+     */
     private LocalDate payPeriodEndDate;
+
+    /**
+     * 应付金额
+     */
     private BigDecimal grossPay;
+
+    /**
+     * 扣减金额
+     */
     private BigDecimal deductions;
+
+    /**
+     * 实付金额
+     */
     private BigDecimal netPay;
 
+    /**
+     * 构造函数
+     * @param payPeriodStartDate
+     * @param payDate
+     */
+    public Paycheck(LocalDate payPeriodStartDate, LocalDate payDate) {
+        this.payDate = payDate;
+        this.payPeriodStartDate = payPeriodStartDate;
+        this.payPeriodEndDate = payDate;
+    }
+
     public LocalDate getPayDate() {
-        return paydate;
+        return payDate;
     }
 
     public BigDecimal getGrossPay() {
@@ -53,12 +90,6 @@ public class Paycheck {
 
     public void setNetPay(BigDecimal netPay) {
         this.netPay = netPay;
-    }
-
-    public Paycheck(LocalDate payPeriodStartDate, LocalDate paydate) {
-        this.paydate = paydate;
-        this.payPeriodStartDate = payPeriodStartDate;
-        this.payPeriodEndDate = paydate;
     }
 
     @Override

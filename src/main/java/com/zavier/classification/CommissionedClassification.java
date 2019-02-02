@@ -1,6 +1,6 @@
 package com.zavier.classification;
 
-import com.zavier.Paycheck;
+import com.zavier.pay.Paycheck;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 底薪加销售提成结薪
  */
-public class CommissionedClassification extends PaymentClassification {
+public class CommissionedClassification extends BasePaymentClassification {
     /**
      * 底薪
      */

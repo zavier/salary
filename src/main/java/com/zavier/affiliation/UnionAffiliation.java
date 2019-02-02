@@ -1,8 +1,7 @@
 package com.zavier.affiliation;
 
-import com.zavier.Paycheck;
+import com.zavier.pay.Paycheck;
 import com.zavier.ServiceCharge;
-import com.zavier.affiliation.Affiliation;
 
 import java.math.BigDecimal;
 import java.time.DayOfWeek;

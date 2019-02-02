@@ -4,6 +4,9 @@ import com.zavier.employee.Employee;
 import com.zavier.GpayrollDatabase;
 import com.zavier.affiliation.Affiliation;
 
+/**
+ * 修改参加的协会
+ */
 public abstract class BaseChangeAffiliationTransaction extends BaseChangeEmployeeTransaction {
 
     public BaseChangeAffiliationTransaction(int empId) {
@@ -16,7 +19,7 @@ public abstract class BaseChangeAffiliationTransaction extends BaseChangeEmploye
     @Override
     public void change(Employee e) {
         recordMemebership(e);
-        e.setAffilication(getAffilication());
+        e.setAffiliation(getAffilication());
         GpayrollDatabase.addEmployee(e.getId(), e);
     }
 }

@@ -1,7 +1,7 @@
 package com.zavier.employee;
 
 
-import com.zavier.Paycheck;
+import com.zavier.pay.Paycheck;
 import com.zavier.affiliation.Affiliation;
 import com.zavier.classification.PaymentClassification;
 import com.zavier.paymethod.PaymentMethod;
@@ -16,7 +16,7 @@ public class Employee {
     private String address;
     private PaymentSchedule paymentSchedule;
     private PaymentMethod paymentMethod;
-    private PaymentClassification paymentClassfication;
+    private PaymentClassification paymentClassification;
     private Affiliation affiliation;
 
     public Employee(Integer id, String name, String address) {
@@ -61,16 +61,16 @@ public class Employee {
         this.paymentMethod = paymentMethod;
     }
 
-    public PaymentClassification getPaymentClassfication() {
-        return paymentClassfication;
+    public PaymentClassification getPaymentClassification() {
+        return paymentClassification;
     }
 
-    public void setPaymentClassfication(
-        PaymentClassification paymentClassfication) {
-        this.paymentClassfication = paymentClassfication;
+    public void setPaymentClassification(
+        PaymentClassification paymentClassification) {
+        this.paymentClassification = paymentClassification;
     }
 
-    public void setAffilication(Affiliation affiliations) {
+    public void setAffiliation(Affiliation affiliations) {
         this.affiliation = affiliations;
     }
 
@@ -78,21 +78,36 @@ public class Employee {
         return affiliation;
     }
 
+    /**
+     * 判断是否是此员工的发薪日期
+     * @param date
+     * @return
+     */
     public boolean isPayDate(LocalDate date) {
         return paymentSchedule.isPayDate(date);
     }
 
+    /**
+     * 获取支付周期的开始日期
+     * @param payDate
+     * @return
+     */
     public LocalDate getPayPeriodStartDate(LocalDate payDate) {
         return paymentSchedule.getPayPeriodStartDate(payDate);
     }
 
+    /**
+     * 根据参数中的时间计算并支付薪水
+     * @param pc
+     */
     public void payday(Paycheck pc) {
-        BigDecimal grossPay = paymentClassfication.calculatePay(pc);
+        BigDecimal grossPay = paymentClassification.calculatePay(pc);
         BigDecimal deductions = affiliation.calculateDeductions(pc);
         BigDecimal netPay = grossPay.subtract(deductions);
         pc.setGrossPay(grossPay);
         pc.setDeductions(deductions);
         pc.setNetPay(netPay);
+        // 计算金额后通过选中的支付方式进行支付
         paymentMethod.pay(pc);
     }
 }

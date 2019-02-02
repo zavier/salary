@@ -1,7 +1,7 @@
 package com.zavier.employee;
 
 import com.zavier.classification.HourlyClassification;
-import com.zavier.classification.PaymentClassification;
+import com.zavier.classification.BasePaymentClassification;
 import com.zavier.payschedule.PaymentSchedule;
 import com.zavier.payschedule.WeeklySchedule;
 
@@ -28,7 +28,7 @@ public class AddHourlyEmployee extends BaseAddEmployeeTransaction {
     }
 
     @Override
-    public PaymentClassification getClassification() {
+    public BasePaymentClassification getClassification() {
         return new HourlyClassification(hourlyRate);
     }
 }

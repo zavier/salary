@@ -5,7 +5,10 @@ import java.time.LocalDate;
 
 public class BiWeeklySchedule implements PaymentSchedule {
 
-    private boolean isPayWeek = false; // 每隔一周支付
+    /**
+     * 每隔一周支付
+     */
+    private boolean isPayWeek = false;
 
     @Override
     public boolean isPayDate(LocalDate date) {
@@ -19,6 +22,6 @@ public class BiWeeklySchedule implements PaymentSchedule {
 
     @Override
     public LocalDate getPayPeriodStartDate(LocalDate date) {
-        return date.minusDays(12);
+        return date.minusDays(13);
     }
 }

@@ -3,7 +3,10 @@ package com.zavier.change;
 import com.zavier.paymethod.MailMethod;
 import com.zavier.paymethod.PaymentMethod;
 
-public class ChangeMailTransaction extends ChangeMethodTransaction {
+/**
+ * 修改支付方式为邮寄支票
+ */
+public class ChangeMailTransaction extends BaseChangeMethodTransaction {
 
     private String address;
 

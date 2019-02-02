@@ -1,12 +1,15 @@
 package com.zavier.change;
 
 import com.zavier.classification.HourlyClassification;
-import com.zavier.classification.PaymentClassification;
+import com.zavier.classification.BasePaymentClassification;
 import com.zavier.payschedule.PaymentSchedule;
 import com.zavier.payschedule.WeeklySchedule;
 
 import java.math.BigDecimal;
 
+/**
+ * 修改计薪方式为小时工
+ */
 public class ChangeHourlyTransaction extends BaseChangeClassificationTransaction {
 
     private BigDecimal hourlyRate;
@@ -17,7 +20,7 @@ public class ChangeHourlyTransaction extends BaseChangeClassificationTransaction
     }
 
     @Override
-    protected PaymentClassification getClassification() {
+    protected BasePaymentClassification getClassification() {
         return new HourlyClassification(hourlyRate);
     }
 

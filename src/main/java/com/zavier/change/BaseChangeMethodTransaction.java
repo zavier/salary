@@ -3,9 +3,12 @@ package com.zavier.change;
 import com.zavier.employee.Employee;
 import com.zavier.paymethod.PaymentMethod;
 
-public abstract class ChangeMethodTransaction extends BaseChangeEmployeeTransaction {
+/**
+ * 修改支付方式
+ */
+public abstract class BaseChangeMethodTransaction extends BaseChangeEmployeeTransaction {
 
-    public ChangeMethodTransaction(int empId) {
+    public BaseChangeMethodTransaction(int empId) {
         super(empId);
     }
 

@@ -1,7 +1,6 @@
 package com.zavier.paymethod;
 
-import com.zavier.Paycheck;
-import com.zavier.paymethod.PaymentMethod;
+import com.zavier.pay.Paycheck;
 
 /**
  * 薪水发到指定银行账号

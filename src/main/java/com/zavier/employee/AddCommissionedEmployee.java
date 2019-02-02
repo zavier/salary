@@ -1,7 +1,7 @@
 package com.zavier.employee;
 
 import com.zavier.classification.CommissionedClassification;
-import com.zavier.classification.PaymentClassification;
+import com.zavier.classification.BasePaymentClassification;
 import com.zavier.payschedule.BiWeeklySchedule;
 import com.zavier.payschedule.PaymentSchedule;
 
@@ -35,7 +35,7 @@ public class AddCommissionedEmployee extends BaseAddEmployeeTransaction {
     }
 
     @Override
-    public PaymentClassification getClassification() {
+    public BasePaymentClassification getClassification() {
         return new CommissionedClassification(salary, commissionRate);
     }
 }
