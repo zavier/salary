@@ -1,8 +1,8 @@
 package com.zavier.change;
 
-import com.zavier.employee.Employee;
 import com.zavier.GpayrollDatabase;
 import com.zavier.Transaction;
+import com.zavier.employee.Employee;
 
 /**
  * 改变雇员信息抽象类
@@ -14,8 +14,6 @@ public abstract class BaseChangeEmployeeTransaction implements Transaction {
         this.empId = empId;
     }
 
-    public abstract void change(Employee e);
-
     @Override
     public void execute() {
         Employee e = GpayrollDatabase.getEmployee(empId);
@@ -23,4 +21,6 @@ public abstract class BaseChangeEmployeeTransaction implements Transaction {
             change(e);
         }
     }
+
+    protected abstract void change(Employee e);
 }

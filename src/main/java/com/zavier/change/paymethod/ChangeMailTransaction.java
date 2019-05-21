@@ -1,4 +1,4 @@
-package com.zavier.change;
+package com.zavier.change.paymethod;
 
 import com.zavier.paymethod.MailMethod;
 import com.zavier.paymethod.PaymentMethod;

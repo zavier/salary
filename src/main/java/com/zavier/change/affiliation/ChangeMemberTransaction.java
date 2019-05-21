@@ -1,14 +1,14 @@
-package com.zavier.change;
+package com.zavier.change.affiliation;
 
-import com.zavier.employee.Employee;
 import com.zavier.GpayrollDatabase;
 import com.zavier.affiliation.Affiliation;
 import com.zavier.affiliation.UnionAffiliation;
+import com.zavier.employee.Employee;
 
 import java.math.BigDecimal;
 
 /**
- * 修改雇员组织信息
+ * 修改工会中的成员信息（即有新成员加入协会等）
  */
 public class ChangeMemberTransaction extends BaseChangeAffiliationTransaction {
 
@@ -22,12 +22,12 @@ public class ChangeMemberTransaction extends BaseChangeAffiliationTransaction {
     }
 
     @Override
-    protected void recordMemebership(Employee e) {
+    protected void recordMembership(Employee e) {
         GpayrollDatabase.addUnionMember(memberId, e);
     }
 
     @Override
-    protected Affiliation getAffilication() {
+    protected Affiliation getAffiliation() {
         return new UnionAffiliation(memberId, dues);
     }
 }

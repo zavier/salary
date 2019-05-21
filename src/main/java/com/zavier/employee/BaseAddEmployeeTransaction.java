@@ -26,8 +26,8 @@ public abstract class BaseAddEmployeeTransaction implements Transaction {
 
     @Override
     public void execute() {
-        BasePaymentClassification pc = getClassification();
-        PaymentSchedule ps = getSchedule();
+        BasePaymentClassification pc = makeClassification();
+        PaymentSchedule ps = makeSchedule();
         PaymentMethod pm = new HoldMethod();
         Employee e = new Employee(empId, name, address);
         e.setPaymentClassification(pc);
@@ -41,11 +41,11 @@ public abstract class BaseAddEmployeeTransaction implements Transaction {
      * 获取支付调度方式
      * @return
      */
-    public abstract PaymentSchedule getSchedule();
+    protected abstract PaymentSchedule makeSchedule();
 
     /**
      * 获取计薪方式
      * @return
      */
-    public abstract BasePaymentClassification getClassification();
+    protected abstract BasePaymentClassification makeClassification();
 }

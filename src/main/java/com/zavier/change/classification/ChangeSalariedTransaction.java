@@ -1,4 +1,4 @@
-package com.zavier.change;
+package com.zavier.change.classification;
 
 import com.zavier.classification.BasePaymentClassification;
 import com.zavier.classification.SalariedClassification;

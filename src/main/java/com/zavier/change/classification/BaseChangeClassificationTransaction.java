@@ -1,7 +1,8 @@
-package com.zavier.change;
+package com.zavier.change.classification;
 
-import com.zavier.employee.Employee;
+import com.zavier.change.BaseChangeEmployeeTransaction;
 import com.zavier.classification.BasePaymentClassification;
+import com.zavier.employee.Employee;
 import com.zavier.payschedule.PaymentSchedule;
 
 /**
@@ -13,12 +14,13 @@ public abstract class BaseChangeClassificationTransaction extends BaseChangeEmpl
         super(empId);
     }
 
-    protected abstract BasePaymentClassification getClassification();
-    protected abstract PaymentSchedule getSchedule();
-
     @Override
     public void change(Employee e) {
         e.setPaymentClassification(getClassification());
         e.setPaymentSchedule(getSchedule());
     }
+
+    protected abstract BasePaymentClassification getClassification();
+
+    protected abstract PaymentSchedule getSchedule();
 }

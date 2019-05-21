@@ -1,7 +1,7 @@
-package com.zavier.change;
+package com.zavier.change.classification;
 
-import com.zavier.classification.HourlyClassification;
 import com.zavier.classification.BasePaymentClassification;
+import com.zavier.classification.HourlyClassification;
 import com.zavier.payschedule.PaymentSchedule;
 import com.zavier.payschedule.WeeklySchedule;
 

@@ -1,5 +1,6 @@
-package com.zavier.change;
+package com.zavier.change.paymethod;
 
+import com.zavier.change.BaseChangeEmployeeTransaction;
 import com.zavier.employee.Employee;
 import com.zavier.paymethod.PaymentMethod;
 
@@ -12,10 +13,10 @@ public abstract class BaseChangeMethodTransaction extends BaseChangeEmployeeTran
         super(empId);
     }
 
-    protected abstract PaymentMethod getMethod();
-
     @Override
     public void change(Employee e) {
         e.setPaymentMethod(getMethod());
     }
+
+    protected abstract PaymentMethod getMethod();
 }

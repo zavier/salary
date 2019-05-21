@@ -24,12 +24,12 @@ public class AddSalariedEmployee extends BaseAddEmployeeTransaction {
     }
 
     @Override
-    public PaymentSchedule getSchedule() {
+    protected PaymentSchedule makeSchedule() {
         return new MonthlySchedule();
     }
 
     @Override
-    public BasePaymentClassification getClassification() {
+    protected BasePaymentClassification makeClassification() {
         return new SalariedClassification(itsSalary);
     }
 }

@@ -1,9 +1,16 @@
 import com.zavier.*;
 import com.zavier.affiliation.Affiliation;
 import com.zavier.affiliation.UnionAffiliation;
+import com.zavier.change.ChangeNameTransaction;
+import com.zavier.change.affiliation.ChangeMemberTransaction;
+import com.zavier.change.classification.ChangeCommissionedTransaction;
+import com.zavier.change.classification.ChangeHourlyTransaction;
+import com.zavier.change.classification.ChangeSalariedTransaction;
+import com.zavier.change.paymethod.ChangeDirectTransaction;
+import com.zavier.change.paymethod.ChangeHoldTransaction;
+import com.zavier.change.paymethod.ChangeMailTransaction;
 import com.zavier.classification.*;
 import com.zavier.employee.*;
-import com.zavier.change.*;
 import com.zavier.pay.Paycheck;
 import com.zavier.pay.PaydayTransaction;
 import com.zavier.paymethod.DirectMethod;
@@ -309,7 +316,7 @@ public class PayrollTest {
     }
 
     @Test
-    public void tesetChangeMemberTransaction() {
+    public void testChangeMemberTransaction() {
         int empId = 2;
         int memberId = 7734;
         AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", new BigDecimal("15.25"));
@@ -378,7 +385,7 @@ public class PayrollTest {
         Assert.assertEquals(pay.compareTo(pc.getGrossPay()), 0);
 //        Assert.assertEquals("Hold", pc.geField("Disposition"));
         Assert.assertEquals(BigDecimal.ZERO, pc.getDeductions());
-        Assert.assertSame(pay.compareTo(pc.getNetPay()), 0);
+        Assert.assertEquals(0, pay.compareTo(pc.getNetPay()));
     }
 
     @Test

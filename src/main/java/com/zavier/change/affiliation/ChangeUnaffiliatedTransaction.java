@@ -1,19 +1,22 @@
-package com.zavier.change;
+package com.zavier.change.affiliation;
 
-import com.zavier.employee.Employee;
 import com.zavier.GpayrollDatabase;
 import com.zavier.affiliation.Affiliation;
 import com.zavier.affiliation.NoAffiliation;
 import com.zavier.affiliation.UnionAffiliation;
+import com.zavier.employee.Employee;
 
-public class ChangeUnffiliatedTransaction extends BaseChangeAffiliationTransaction {
+/**
+ * 修改为无工会
+ */
+public class ChangeUnaffiliatedTransaction extends BaseChangeAffiliationTransaction {
 
-    public ChangeUnffiliatedTransaction(int empId) {
+    public ChangeUnaffiliatedTransaction(int empId) {
         super(empId);
     }
 
     @Override
-    protected void recordMemebership(Employee e) {
+    protected void recordMembership(Employee e) {
         Affiliation af = e.getAffiliation();
         if (af instanceof UnionAffiliation) {
             UnionAffiliation uf = (UnionAffiliation) af;
@@ -23,7 +26,7 @@ public class ChangeUnffiliatedTransaction extends BaseChangeAffiliationTransacti
     }
 
     @Override
-    protected Affiliation getAffilication() {
+    protected Affiliation getAffiliation() {
         return new NoAffiliation();
     }
 }
