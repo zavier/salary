@@ -17,6 +17,6 @@ public class MonthlySchedule implements PaymentSchedule {
 
     @Override
     public LocalDate getPayPeriodStartDate(LocalDate date) {
-        return LocalDate.of(date.getYear(), date.getMonthValue() - 1, 1);
+        return date.with(TemporalAdjusters.firstDayOfMonth());
     }
 }

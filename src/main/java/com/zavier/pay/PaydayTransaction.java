@@ -3,7 +3,6 @@ package com.zavier.pay;
 import com.zavier.GpayrollDatabase;
 import com.zavier.Transaction;
 import com.zavier.employee.Employee;
-import com.zavier.pay.Paycheck;
 
 import java.time.LocalDate;
 import java.util.HashMap;

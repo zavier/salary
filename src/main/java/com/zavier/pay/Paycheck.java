@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
- * 用于保存支付时间相关信息
+ * 用于保存支付时间金额等相关信息
  */
 public class Paycheck {
     /**

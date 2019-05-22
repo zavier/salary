@@ -8,7 +8,7 @@ import java.time.LocalDate;
 public interface PaymentSchedule {
 
     /**
-     * 是否时支付日期
+     * 是否是支付日期
      * @param date
      * @return
      */

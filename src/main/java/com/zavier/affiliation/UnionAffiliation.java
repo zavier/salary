@@ -1,7 +1,7 @@
 package com.zavier.affiliation;
 
-import com.zavier.pay.Paycheck;
 import com.zavier.ServiceCharge;
+import com.zavier.pay.Paycheck;
 
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
@@ -50,7 +50,7 @@ public class UnionAffiliation implements Affiliation {
         BigDecimal totalDues = BigDecimal.ZERO;
         LocalDate startDate = pc.getPayPeriodStartDate();
         LocalDate endDate = pc.getPayPeriodEndDate();
-        int fridays = numberOfFirdaysInPayPeriod(startDate, endDate);
+        int fridays = numberOfFridaysInPayPeriod(startDate, endDate);
         for (ServiceCharge serviceCharge : serviceChargeList) {
             LocalDate date = serviceCharge.getDate();
             if (date.compareTo(startDate) >= 0 && date.compareTo(endDate) <= 0) {
@@ -61,7 +61,7 @@ public class UnionAffiliation implements Affiliation {
         return totalDues;
     }
 
-    public int numberOfFirdaysInPayPeriod(LocalDate payPeriodStart, LocalDate payPeriodEnd) {
+    public int numberOfFridaysInPayPeriod(LocalDate payPeriodStart, LocalDate payPeriodEnd) {
         int fridays = 0;
         LocalDate day = payPeriodStart;
         while (day.compareTo(payPeriodEnd) <= 0) {

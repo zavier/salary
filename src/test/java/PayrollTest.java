@@ -40,7 +40,6 @@ public class PayrollTest {
 
         PaymentClassification pc = e.getPaymentClassification();
         Assert.assertTrue(pc instanceof SalariedClassification);
-//        Assert.assertEquals(1000.00, pc.calculatePay(), 0.0001);
 
         PaymentSchedule ps = e.getPaymentSchedule();
         Assert.assertTrue(ps instanceof MonthlySchedule);
@@ -334,6 +333,9 @@ public class PayrollTest {
         Assert.assertSame(e, member);
     }
 
+    /**
+     * 月薪员工，月底结算薪水
+     */
     @Test
     public void testPaySingleSalariedEmployee() {
         int empId = 1;
@@ -341,17 +343,19 @@ public class PayrollTest {
                 new BigDecimal("1000"));
         t.execute();
 
-        LocalDate payDate = LocalDate.of(2001, 11, 30);
+        LocalDate payDate = LocalDate.of(2019, 1, 31);
         PaydayTransaction pt = new PaydayTransaction(payDate);
         pt.execute();
         Paycheck pc = pt.getPaycheck(empId);
         Assert.assertEquals(pc.getPayDate(), payDate);
         Assert.assertEquals(new BigDecimal("1000"), pc.getGrossPay());
-//        Assert.assertEquals("Hold", pc.getField("Disposition"));
         Assert.assertEquals(BigDecimal.ZERO, pc.getDeductions());
         Assert.assertEquals(new BigDecimal("1000"), pc.getNetPay());
     }
 
+    /**
+     * 月薪员工，未到月底时没有需要支付的信息
+     */
     @Test
     public void testPaySingleSalariedEmployeeOnWrongDate() {
         int empId = 1;
@@ -359,20 +363,23 @@ public class PayrollTest {
                 new BigDecimal("1000"));
         t.execute();
 
-        LocalDate payDate = LocalDate.of(2001, 11, 29);
+        LocalDate payDate = LocalDate.of(2019, 1, 29);
         PaydayTransaction pt = new PaydayTransaction(payDate);
         pt.execute();
         Paycheck pc = pt.getPaycheck(empId);
         Assert.assertNull(pc);
     }
 
+    /**
+     * 时薪员工，在发薪日（周五）发薪，但是没有工作时长时薪水为0
+     */
     @Test
     public void testPaySingleHourlyEmployeeNoTimeCards() {
         int empId = 2;
         AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", new BigDecimal("15.25"));
         t.execute();
-
-        LocalDate date = LocalDate.of(2001, 11, 9);
+        // 日期时周五，在周五进行支付
+        LocalDate date = LocalDate.of(2019, 5, 24);
         PaydayTransaction pt = new PaydayTransaction(date);
         pt.execute();
         validatePaycheck(pt, empId, date, BigDecimal.ZERO);
@@ -383,18 +390,20 @@ public class PayrollTest {
         Assert.assertNotNull(pc);
         Assert.assertEquals(date, pc.getPayPeriodEndDate());
         Assert.assertEquals(pay.compareTo(pc.getGrossPay()), 0);
-//        Assert.assertEquals("Hold", pc.geField("Disposition"));
         Assert.assertEquals(BigDecimal.ZERO, pc.getDeductions());
         Assert.assertEquals(0, pay.compareTo(pc.getNetPay()));
     }
 
+    /**
+     * 时薪员工，只有一条工时记录卡记录，在周五进行发薪
+     */
     @Test
     public void testPaySingleHourlyEmployeeOneTimeCard() {
         int empId = 2;
         AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", new BigDecimal("15.25"));
         t.execute();
 
-        LocalDate date = LocalDate.of(2001, 11, 9);
+        LocalDate date = LocalDate.of(2019, 5, 24);
         TimeCardTransaction tc = new TimeCardTransaction(date, 2.0, empId);
         tc.execute();
 
@@ -404,13 +413,16 @@ public class PayrollTest {
         validatePaycheck(pt, empId, date, new BigDecimal("30.5"));
     }
 
+    /**
+     * 时薪员工工作时长超过8小时，进行发薪
+     */
     @Test
     public void testPaySingleHourlyEmployeeOvertimeOneTimeCard() {
         int empId = 2;
         AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", new BigDecimal("15.25"));
         t.execute();
 
-        LocalDate date = LocalDate.of(2001, 11, 9);
+        LocalDate date = LocalDate.of(2019, 5, 24);
         TimeCardTransaction tc = new TimeCardTransaction(date, 9.0, empId);
         tc.execute();
 
@@ -421,13 +433,17 @@ public class PayrollTest {
         validatePaycheck(pt, empId, date, res);
     }
 
+    /**
+     * 时薪员工，在非发薪日允许发薪程序，不发放薪水
+     */
     @Test
-    public void testPaysingleHourlyEmployeeOnWrongDate() {
+    public void testPaySingleHourlyEmployeeOnWrongDate() {
         int empId = 2;
         AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", new BigDecimal("15.25"));
         t.execute();
 
-        LocalDate date = LocalDate.of(2001, 11, 8);
+        // 非周五
+        LocalDate date = LocalDate.of(2019, 5, 23);
         TimeCardTransaction tc = new TimeCardTransaction(date, 9.0, empId);
         tc.execute();
 
@@ -438,17 +454,20 @@ public class PayrollTest {
         Assert.assertNull(pc);
     }
 
+    /**
+     * 时薪员工，有两条记录，进行发薪
+     */
     @Test
     public void testPaySingleHourlyEmployeeTwoTimeCards() {
         int empId = 2;
         AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", new BigDecimal("15.25"));
         t.execute();
 
-        LocalDate date = LocalDate.of(2001, 11, 9);
+        LocalDate date = LocalDate.of(2019, 5, 24);
         TimeCardTransaction tc = new TimeCardTransaction(date, 2.0, empId);
         tc.execute();
-        TimeCardTransaction tc1 = new TimeCardTransaction(LocalDate.of(2001, 11, 8),
-            5.0, empId);
+        TimeCardTransaction tc1 = new TimeCardTransaction(LocalDate.of(2019, 5, 24),
+                5.0, empId);
         tc1.execute();
 
         PaydayTransaction pt = new PaydayTransaction(date);
@@ -456,18 +475,21 @@ public class PayrollTest {
         validatePaycheck(pt, empId, date, new BigDecimal("7").multiply(new BigDecimal("15.25")));
     }
 
+    /**
+     * 时薪员工，只计算发放发薪周期内的薪水
+     */
     @Test
     public void testPaySingHourlyEmployeeWithTimeCardsSpanningTwoPayPeriods() {
         int empId = 2;
         AddHourlyEmployee t = new AddHourlyEmployee(empId, "Bill", "Home", new BigDecimal("15.25"));
         t.execute();
 
-        LocalDate payDate = LocalDate.of(2001, 11, 9);
-        LocalDate deteInPreviousPayPeriod = LocalDate.of(2001, 11, 2);
+        LocalDate payDate = LocalDate.of(2019, 5, 24);
+        LocalDate dateInPreviousPayPeriod = LocalDate.of(2019, 5, 17);
         TimeCardTransaction tc = new TimeCardTransaction(payDate, 2.0, empId);
         tc.execute();
-        TimeCardTransaction tc2 = new TimeCardTransaction(deteInPreviousPayPeriod,
-            5.0, empId);
+        TimeCardTransaction tc2 = new TimeCardTransaction(dateInPreviousPayPeriod,
+                5.0, empId);
         tc2.execute();
 
         PaydayTransaction pt = new PaydayTransaction(payDate);
@@ -477,11 +499,13 @@ public class PayrollTest {
     }
 
     private void emptyRunningFirstWeek(LocalDate date) {
-//        LocalDate date = LocalDate.of(2001, 11, 9);
         PaydayTransaction pt = new PaydayTransaction(date);
         pt.execute();
     }
 
+    /**
+     * 销售雇员，没有销售记录时只发放基本薪水
+     */
     @Test
     public void testPaySingleCommissionEmployeeNoSalesReceipts() {
         int empId = 2;
@@ -489,29 +513,32 @@ public class PayrollTest {
                 new BigDecimal("1200"), new BigDecimal("0.23"));
         t.execute();
 
-        LocalDate firstWeekDate = LocalDate.of(2001, 11, 9);
+        LocalDate firstWeekDate = LocalDate.of(2019, 5, 17);
         emptyRunningFirstWeek(firstWeekDate);
-        // 因为每隔一周运行一次，所以再运行一次
-        LocalDate date1 = LocalDate.of(2001, 11, 16);
+        // 因为每隔一周运行一次，所以再运行一次记录数据
+        LocalDate date1 = LocalDate.of(2019, 5, 24);
         PaydayTransaction pt1 = new PaydayTransaction(date1);
         pt1.execute();
         validatePaycheck(pt1, empId, date1, new BigDecimal("1200"));
     }
 
+    /**
+     * 只有一条销售记录的销售雇员发放薪水
+     */
     @Test
     public void testPaySingleCommissionEmployeeOneSalesReceipt() {
         int empId = 2;
         AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Bill",
-            "Home", new BigDecimal("1200"), new BigDecimal("0.23"));
+                "Home", new BigDecimal("1200"), new BigDecimal("0.23"));
         t.execute();
 
-        LocalDate firstWeekDate = LocalDate.of(2001, 11, 9);
+        LocalDate firstWeekDate = LocalDate.of(2019, 5, 17);
         emptyRunningFirstWeek(firstWeekDate);
 
 
-        LocalDate date1 = LocalDate.of(2001, 11, 9);
+        LocalDate date1 = LocalDate.of(2019, 5, 24);
         SalesReceiptTransaction srt = new SalesReceiptTransaction(date1, new BigDecimal("5000"),
-            empId);
+                empId);
         srt.execute();
 
         PaydayTransaction pt = new PaydayTransaction(date1);
@@ -520,18 +547,20 @@ public class PayrollTest {
         validatePaycheck(pt, empId, date1, res);
     }
 
-
+    /**
+     * 销售雇员，非发薪日运行程序不发放薪水
+     */
     @Test
-    public void testPaysingleCommissionEmployeeOnWrongDate() {
+    public void testPaySingleCommissionEmployeeOnWrongDate() {
         int empId = 2;
         AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Bill",
             "Home", new BigDecimal("1200"), new BigDecimal("0.23"));
         t.execute();
 
-        LocalDate firstWeekDate = LocalDate.of(2001, 11, 9);
+        LocalDate firstWeekDate = LocalDate.of(2019, 5, 24);
         emptyRunningFirstWeek(firstWeekDate);
 
-        LocalDate date1 = LocalDate.of(2001, 11, 10);
+        LocalDate date1 = LocalDate.of(2019, 5, 25);
         SalesReceiptTransaction srt = new SalesReceiptTransaction(date1, new BigDecimal("5000"),
             empId);
         srt.execute();
@@ -543,23 +572,25 @@ public class PayrollTest {
         Assert.assertNull(pc);
     }
 
+    /**
+     * 销售员工有两条发薪记录发薪
+     */
     @Test
     public void testPaySingleCommissionEmployeeTwoSalesReceipts() {
         int empId = 2;
         AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Bill",
-            "Home", new BigDecimal("1200"), new BigDecimal("0.23"));
+                "Home", new BigDecimal("1200"), new BigDecimal("0.23"));
         t.execute();
 
-        LocalDate firstWeekDate = LocalDate.of(2001, 11, 2);
+        LocalDate firstWeekDate = LocalDate.of(2019, 5, 17);
         emptyRunningFirstWeek(firstWeekDate);
 
-        LocalDate date1 = LocalDate.of(2001, 11, 9);
-        SalesReceiptTransaction srt = new SalesReceiptTransaction(date1, new BigDecimal("5000"),
-            empId);
+        LocalDate date1 = LocalDate.of(2019, 5, 24);
+        SalesReceiptTransaction srt = new SalesReceiptTransaction(date1, new BigDecimal("5000"), empId);
         srt.execute();
+
         SalesReceiptTransaction srt1 = new SalesReceiptTransaction(
-            LocalDate.of(2001, 11, 8), new BigDecimal("3000"),
-            empId);
+                LocalDate.of(2019, 5, 23), new BigDecimal("3000"), empId);
         srt1.execute();
 
         PaydayTransaction pt = new PaydayTransaction(date1);
@@ -569,21 +600,25 @@ public class PayrollTest {
         validatePaycheck(pt, empId, date1, res);
     }
 
+    /**
+     * 销售雇员，有两张销售凭条，结算时只结算在有效范围内的
+     */
     @Test
     public void testPaySingCommissionEmployeeWithSalesReceiptsSpanningTwoPayPeriods() {
         int empId = 2;
         AddCommissionedEmployee t = new AddCommissionedEmployee(empId, "Bill",
-            "Home", new BigDecimal("1200"), new BigDecimal("0.23"));
+                "Home", new BigDecimal("1200"), new BigDecimal("0.23"));
         t.execute();
 
-        LocalDate firstWeekDate = LocalDate.of(2001, 11, 2);
+        LocalDate firstWeekDate = LocalDate.of(2019, 5, 17);
         emptyRunningFirstWeek(firstWeekDate);
 
-        LocalDate payDate = LocalDate.of(2001, 11, 9);
-        LocalDate deteInPreviousPayPeriod = LocalDate.of(2001, 10, 26);
+        LocalDate payDate = LocalDate.of(2019, 5, 24);
         SalesReceiptTransaction srt1 = new SalesReceiptTransaction(payDate, new BigDecimal("2500"), empId);
         srt1.execute();
-        SalesReceiptTransaction srt2 = new SalesReceiptTransaction(deteInPreviousPayPeriod,
+
+        LocalDate dateInPreviousPayPeriod = LocalDate.of(2019, 5, 10);
+        SalesReceiptTransaction srt2 = new SalesReceiptTransaction(dateInPreviousPayPeriod,
                 new BigDecimal("1800"), empId);
         srt2.execute();
 
@@ -594,6 +629,9 @@ public class PayrollTest {
         validatePaycheck(pt, empId, payDate, res);
     }
 
+    /**
+     * 时薪雇员正确结算费用，扣除服务费
+     */
     @Test
     public void testHourlyUnionMemberServiceCharge() {
         int empId = 1;
@@ -602,12 +640,12 @@ public class PayrollTest {
 
         int memberId = 7734;
         ChangeMemberTransaction cmt = new ChangeMemberTransaction(empId,
-            memberId, new BigDecimal("9.42"));
+                memberId, new BigDecimal("9.42"));
         cmt.execute();
 
-        LocalDate payDate = LocalDate.of(2001, 11, 9);
+        LocalDate payDate = LocalDate.of(2019, 5, 24);
         ServiceChargeTransaction sct = new ServiceChargeTransaction(memberId,
-            payDate, new BigDecimal("19.42"));
+                payDate, new BigDecimal("19.42"));
         sct.execute();
 
         TimeCardTransaction tct = new TimeCardTransaction(payDate, 8.0, empId);
@@ -619,7 +657,6 @@ public class PayrollTest {
         Paycheck pc = pt.getPaycheck(empId);
         Assert.assertEquals(pc.getPayPeriodEndDate(), payDate);
         Assert.assertEquals(new BigDecimal("8").multiply(new BigDecimal("15.24")).compareTo(pc.getGrossPay()), 0);
-//        Assert.assertEquals("Hold", pc.getField("Dispositon"));
         Assert.assertEquals(new BigDecimal("9.42").add(new BigDecimal("19.42")).compareTo(pc.getDeductions()), 0);
         Assert.assertEquals(BigDecimal.valueOf((8*15.24)-(9.42+19.42)).compareTo(pc.getNetPay()), 0);
     }
@@ -635,16 +672,21 @@ public class PayrollTest {
             memberId, new BigDecimal("9.42"));
         cmt.execute();
 
-        LocalDate earlyDate = LocalDate.of(2001, 11, 2);
-        LocalDate payDate = LocalDate.of(2001, 11, 9);
-        LocalDate lateDate = LocalDate.of(2001, 11, 16);
 
+        // 结算日期
+        LocalDate payDate = LocalDate.of(2019, 5, 17);
         ServiceChargeTransaction sct = new ServiceChargeTransaction(memberId,
             payDate, new BigDecimal("19.42"));
         sct.execute();
+
+        // 不在此次结算周期内的服务费
+        LocalDate earlyDate = LocalDate.of(2019, 5, 10);
         ServiceChargeTransaction sctEarly = new ServiceChargeTransaction(memberId,
             earlyDate, new BigDecimal("100"));
         sctEarly.execute();
+
+        // 不在此次结算周期内的服务费
+        LocalDate lateDate = LocalDate.of(2019, 5, 24);
         ServiceChargeTransaction sctLate = new ServiceChargeTransaction(memberId,
             lateDate, new BigDecimal("200"));
         sctLate.execute();
@@ -658,7 +700,6 @@ public class PayrollTest {
         Paycheck pc = pt.getPaycheck(empId);
         Assert.assertEquals(pc.getPayPeriodEndDate(), payDate);
         Assert.assertSame(new BigDecimal("8").multiply(new BigDecimal("15.24")).compareTo(pc.getGrossPay()), 0);
-//        Assert.assertEquals("Hold", pc.geField("Disposition"));
         Assert.assertEquals(new BigDecimal("9.42").add(new BigDecimal("19.42")), pc.getDeductions());
         Assert.assertSame(BigDecimal.valueOf((8 * 15.24) - (9.42 + 19.42)).compareTo(pc.getNetPay()), 0);
 
